@@ -16,6 +16,9 @@
   ],
   "license": "MIT",
   "type": "module",
+  "files": [
+    "src/**/*.res"
+  ],
   "main": "src/ToneJs.res.js",
   "scripts": {
     "res:build": "rescript",
