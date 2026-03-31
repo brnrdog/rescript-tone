@@ -49,3 +49,10 @@ module Gate = ToneJs_Gate
 module Filter = ToneJs_Filter
 module EQ3 = ToneJs_EQ3
 module Panner = ToneJs_Panner
+
+// Signal & Channel
+module Signal = ToneJs_Signal
+module Volume = ToneJs_Volume
+module Gain = ToneJs_Gain
+module Channel = ToneJs_Channel
+module CrossFade = ToneJs_CrossFade
