@@ -1,0 +1,33 @@
+{
+  "name": "rescript-tonejs",
+  "version": "0.1.0",
+  "description": "ReScript bindings for Tone.js",
+  "keywords": [
+    "rescript",
+    "tonejs",
+    "tone",
+    "audio",
+    "web-audio",
+    "bindings"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "src/ToneJs.res.js",
+  "scripts": {
+    "res:build": "rescript",
+    "res:dev": "rescript -w",
+    "test": "rescript && node tests/Tests.res.js",
+    "vite:dev": "vite",
+    "vite:build": "vite build"
+  },
+  "peerDependencies": {
+    "rescript": "^12.0.0",
+    "tone": "^15.0.0"
+  },
+  "devDependencies": {
+    "rescript": "^12.2.0",
+    "tone": "^15.1.22",
+    "vite": "^6.0.0",
+    "zekr": "^1.8.0"
+  }
+}
