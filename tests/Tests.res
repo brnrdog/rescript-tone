@@ -1,5 +1,5 @@
 open Zekr
 
-let allSuites = []
+let allSuites = Array.flat([CoreTests.suites])
 
 runSuites(allSuites)
