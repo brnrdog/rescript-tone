@@ -12,5 +12,5 @@
   ],
   "suffix": ".res.js",
   "dev-dependencies": ["zekr"],
-  "namespace": true
+  "namespace": "Tone"
 }

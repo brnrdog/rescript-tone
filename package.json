@@ -19,7 +19,7 @@
   "files": [
     "src/**/*.res"
   ],
-  "main": "src/ToneJs.res.js",
+  "main": "src/Tone.res.js",
   "scripts": {
     "res:build": "rescript",
     "res:dev": "rescript -w",

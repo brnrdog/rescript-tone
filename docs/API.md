@@ -1,6 +1,6 @@
 # rescript-tone API Reference
 
-Complete API reference for rescript-tone bindings. All modules are accessible via `open RescriptTone` or by using the `ToneJs_` prefixed module names directly.
+Complete API reference for rescript-tone bindings. All modules are accessible under the `Tone` namespace (e.g., `Tone.Synth`, `Tone.Reverb`).
 
 ---
 
@@ -8,7 +8,7 @@ Complete API reference for rescript-tone bindings. All modules are accessible vi
 
 - [Types](#types)
 - [Core](#core)
-  - [Tone](#tone)
+  - [Core](#core-module)
   - [Context](#context)
   - [Transport](#transport)
   - [Destination](#destination)
@@ -66,7 +66,7 @@ Complete API reference for rescript-tone bindings. All modules are accessible vi
 
 ## Types
 
-Module: `ToneJs_Types`
+Module: `Tone.Types`
 
 ### Unit Types
 
@@ -157,9 +157,9 @@ Frequency.fromNotation("C4") // Create frequency from note name
 
 ## Core
 
-### Tone
+### Core Module
 
-Module: `ToneJs_Tone`
+Module: `Tone.Core`
 
 Top-level functions for the Tone.js audio engine.
 
@@ -167,9 +167,9 @@ Top-level functions for the Tone.js audio engine.
 start: unit => promise<unit>
 now: unit => seconds
 immediate: unit => seconds
-getContext: unit => ToneJs_Context.t
-getTransport: unit => ToneJs_Transport.t
-getDestination: unit => ToneJs_Destination.t
+getContext: unit => Context.t
+getTransport: unit => Transport.t
+getDestination: unit => Destination.t
 loaded: unit => promise<unit>
 supported: unit => bool
 version: string
@@ -177,7 +177,7 @@ version: string
 
 ### Context
 
-Module: `ToneJs_Context`
+Module: `Tone.Context`
 
 The audio context wrapper.
 
@@ -207,7 +207,7 @@ clearInterval: (t, int) => t
 
 ### Transport
 
-Module: `ToneJs_Transport`
+Module: `Tone.Transport`
 
 Master timing and scheduling.
 
@@ -235,7 +235,7 @@ scheduleOnce: (t, seconds => unit, transportTime) => int
 clear: (t, int) => t
 
 // Properties
-bpm: t => ToneJs_Param.t                  // @get
+bpm: t => Param.t                          // @get
 position: t => string                      // @get
 setPosition: (t, string) => unit           // @set
 seconds: t => seconds                      // @get
@@ -270,22 +270,22 @@ nextSubdivision: (t, time) => seconds
 
 ### Destination
 
-Module: `ToneJs_Destination`
+Module: `Tone.Destination`
 
 The master audio output.
 
 ```rescript
-volume: t => ToneJs_Param.t       // @get
+volume: t => Param.t              // @get
 mute: t => bool                    // @get
 setMute: (t, bool) => unit         // @set
 maxChannelCount: t => int          // @get
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### AudioNode
 
-Module: `ToneJs_AudioNode`
+Module: `Tone.AudioNode`
 
 Base type for all audio-processing nodes. Use `asAudioNode` on any module to access these methods.
 
@@ -310,7 +310,7 @@ setChannelCount: (t, int) => unit // @set
 
 ### Param
 
-Module: `ToneJs_Param`
+Module: `Tone.Param`
 
 Automatable audio parameters (used by volume, frequency, BPM, etc.).
 
@@ -359,20 +359,20 @@ triggerAttackReleaseAt: (t, frequency, time, ~time: time=?) => t
 triggerAttackReleaseAtVel: (t, frequency, time, ~time: time=?, ~velocity: normalRange=?) => t
 
 // Properties
-volume: t => ToneJs_Param.t
-frequency: t => ToneJs_Param.t
-detune: t => ToneJs_Param.t
+volume: t => Param.t
+frequency: t => Param.t
+detune: t => Param.t
 
 // Lifecycle
 dispose: t => t
 sync: t => t
 unsync: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Synth
 
-Module: `ToneJs_Synth`
+Module: `Tone.Synth`
 
 A basic monophonic synthesizer with an oscillator and amplitude envelope.
 
@@ -386,7 +386,7 @@ type options = {
 
 ### AMSynth
 
-Module: `ToneJs_AMSynth`
+Module: `Tone.AMSynth`
 
 Amplitude modulation synthesis.
 
@@ -403,7 +403,7 @@ type options = {
 
 ### FMSynth
 
-Module: `ToneJs_FMSynth`
+Module: `Tone.FMSynth`
 
 Frequency modulation synthesis.
 
@@ -421,7 +421,7 @@ type options = {
 
 ### MonoSynth
 
-Module: `ToneJs_MonoSynth`
+Module: `Tone.MonoSynth`
 
 Monophonic synthesizer with a filter and filter envelope.
 
@@ -437,7 +437,7 @@ type options = {
 
 ### PolySynth
 
-Module: `ToneJs_PolySynth`
+Module: `Tone.PolySynth`
 
 Polyphonic synthesizer that manages multiple voices.
 
@@ -472,7 +472,7 @@ setMaxPolyphony: (t, int) => unit  // @set
 
 ### Oscillator
 
-Module: `ToneJs_Oscillator`
+Module: `Tone.Oscillator`
 
 A waveform oscillator.
 
@@ -497,9 +497,9 @@ restart: (t, ~time: time=?) => t
 dispose: t => t
 
 // Properties
-frequency: t => ToneJs_Param.t
-detune: t => ToneJs_Param.t
-volume: t => ToneJs_Param.t
+frequency: t => Param.t
+detune: t => Param.t
+volume: t => Param.t
 getType: t => oscillatorType           // @get "type"
 setType: (t, oscillatorType) => unit   // @set "type"
 phase: t => degrees                    // @get
@@ -514,12 +514,12 @@ syncFrequency: t => t
 unsyncFrequency: t => t
 sync: t => t
 unsync: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Player
 
-Module: `ToneJs_Player`
+Module: `Tone.Player`
 
 Audio file playback.
 
@@ -555,7 +555,7 @@ dispose: t => t
 load: (t, string) => promise<t>
 
 // Properties
-volume: t => ToneJs_Param.t
+volume: t => Param.t
 loaded: t => bool
 loop / setLoop: bool
 loopStart / setLoopStart: time
@@ -568,12 +568,12 @@ fadeIn / setFadeIn: time
 fadeOut / setFadeOut: time
 sync: t => t
 unsync: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Noise
 
-Module: `ToneJs_Noise`
+Module: `Tone.Noise`
 
 Noise generator (white, brown, or pink).
 
@@ -597,14 +597,14 @@ restart: (t, ~time: time=?) => t
 dispose: t => t
 
 // Properties
-volume: t => ToneJs_Param.t
+volume: t => Param.t
 getType / setType: noiseType
 playbackRate / setPlaybackRate: positive
 fadeIn / setFadeIn: time
 fadeOut / setFadeOut: time
 sync: t => t
 unsync: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ---
@@ -614,14 +614,14 @@ asAudioNode: t => ToneJs_AudioNode.t
 All effects share a common base:
 
 ```rescript
-wet: t => ToneJs_Param.t              // dry/wet mix (0 = dry, 1 = wet)
+wet: t => Param.t                     // dry/wet mix (0 = dry, 1 = wet)
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Reverb
 
-Module: `ToneJs_Reverb`
+Module: `Tone.Reverb`
 
 Convolution reverb.
 
@@ -634,14 +634,14 @@ makeWithOptions: options => t
 
 decay / setDecay: time
 preDelay / setPreDelay: time
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 ready: t => promise<unit>
 generate: t => promise<t>
 ```
 
 ### FeedbackDelay
 
-Module: `ToneJs_FeedbackDelay`
+Module: `Tone.FeedbackDelay`
 
 Delay with feedback loop.
 
@@ -653,14 +653,14 @@ makeWithTime: time => t
 makeWithTimeFeedback: (time, normalRange) => t
 makeWithOptions: options => t
 
-delayTime: t => ToneJs_Param.t
-feedback: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+delayTime: t => Param.t
+feedback: t => Param.t
+wet: t => Param.t
 ```
 
 ### Chorus
 
-Module: `ToneJs_Chorus`
+Module: `Tone.Chorus`
 
 Chorus effect with LFO modulation.
 
@@ -674,12 +674,12 @@ make: unit => t
 makeWithArgs: (frequency, milliseconds, normalRange) => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
+frequency: t => Param.t
 depth / setDepth: normalRange
 delayTime / setDelayTime: milliseconds
 getType / setType: oscillatorType
 spread / setSpread: degrees
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 start: (t, ~time: time=?) => t
 stop: (t, ~time: time=?) => t
 sync: t => t
@@ -688,7 +688,7 @@ unsync: t => t
 
 ### Distortion
 
-Module: `ToneJs_Distortion`
+Module: `Tone.Distortion`
 
 Waveshaping distortion.
 
@@ -701,12 +701,12 @@ makeWithOptions: options => t
 
 distortion / setDistortion: float
 oversample / setOversample: oversampleType
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 ```
 
 ### AutoFilter
 
-Module: `ToneJs_AutoFilter`
+Module: `Tone.AutoFilter`
 
 LFO-controlled filter.
 
@@ -719,9 +719,9 @@ type options = {
 make: unit => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
-depth: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+frequency: t => Param.t
+depth: t => Param.t
+wet: t => Param.t
 octaves / setOctaves: positive
 baseFrequency / setBaseFrequency: frequency
 start: (t, ~time: time=?) => t
@@ -732,7 +732,7 @@ unsync: t => t
 
 ### AutoPanner
 
-Module: `ToneJs_AutoPanner`
+Module: `Tone.AutoPanner`
 
 LFO-controlled panning.
 
@@ -742,9 +742,9 @@ type options = { frequency?: frequency, "type"?: oscillatorType, depth?: normalR
 make: unit => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
-depth: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+frequency: t => Param.t
+depth: t => Param.t
+wet: t => Param.t
 start: (t, ~time: time=?) => t
 stop: (t, ~time: time=?) => t
 sync: t => t
@@ -753,7 +753,7 @@ unsync: t => t
 
 ### AutoWah
 
-Module: `ToneJs_AutoWah`
+Module: `Tone.AutoWah`
 
 Envelope-follower controlled filter.
 
@@ -766,9 +766,9 @@ type options = {
 make: unit => t
 makeWithOptions: options => t
 
-gain: t => ToneJs_Param.t
-q: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+gain: t => Param.t
+q: t => Param.t
+wet: t => Param.t
 octaves / setOctaves: positive
 baseFrequency / setBaseFrequency: frequency
 sensitivity / setSensitivity: decibels
@@ -776,7 +776,7 @@ sensitivity / setSensitivity: decibels
 
 ### BitCrusher
 
-Module: `ToneJs_BitCrusher`
+Module: `Tone.BitCrusher`
 
 Bit depth reduction.
 
@@ -787,13 +787,13 @@ make: unit => t
 makeWithBits: positive => t
 makeWithOptions: options => t
 
-bits: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+bits: t => Param.t
+wet: t => Param.t
 ```
 
 ### Chebyshev
 
-Module: `ToneJs_Chebyshev`
+Module: `Tone.Chebyshev`
 
 Chebyshev waveshaping distortion.
 
@@ -806,12 +806,12 @@ makeWithOptions: options => t
 
 order / setOrder: int
 oversample / setOversample: oversampleType
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 ```
 
 ### Freeverb
 
-Module: `ToneJs_Freeverb`
+Module: `Tone.Freeverb`
 
 Freeverb algorithm reverb.
 
@@ -821,14 +821,14 @@ type options = { roomSize?: normalRange, dampening?: frequency, wet?: normalRang
 make: unit => t
 makeWithOptions: options => t
 
-roomSize: t => ToneJs_Param.t
-dampening: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+roomSize: t => Param.t
+dampening: t => Param.t
+wet: t => Param.t
 ```
 
 ### JCReverb
 
-Module: `ToneJs_JCReverb`
+Module: `Tone.JCReverb`
 
 JC-120 style reverb.
 
@@ -838,13 +838,13 @@ type options = { roomSize?: normalRange, wet?: normalRange }
 make: unit => t
 makeWithOptions: options => t
 
-roomSize: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+roomSize: t => Param.t
+wet: t => Param.t
 ```
 
 ### Phaser
 
-Module: `ToneJs_Phaser`
+Module: `Tone.Phaser`
 
 Phaser effect.
 
@@ -857,16 +857,16 @@ type options = {
 make: unit => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
+frequency: t => Param.t
 octaves / setOctaves: positive
-q: t => ToneJs_Param.t
+q: t => Param.t
 baseFrequency / setBaseFrequency: frequency
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 ```
 
 ### PingPongDelay
 
-Module: `ToneJs_PingPongDelay`
+Module: `Tone.PingPongDelay`
 
 Stereo ping-pong delay.
 
@@ -878,14 +878,14 @@ makeWithTime: time => t
 makeWithTimeFeedback: (time, normalRange) => t
 makeWithOptions: options => t
 
-delayTime: t => ToneJs_Param.t
-feedback: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+delayTime: t => Param.t
+feedback: t => Param.t
+wet: t => Param.t
 ```
 
 ### PitchShift
 
-Module: `ToneJs_PitchShift`
+Module: `Tone.PitchShift`
 
 Pitch shifting effect.
 
@@ -900,14 +900,14 @@ makeWithOptions: options => t
 
 pitch / setPitch: float           // semitones
 windowSize / setWindowSize: seconds
-delayTime: t => ToneJs_Param.t
-feedback: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+delayTime: t => Param.t
+feedback: t => Param.t
+wet: t => Param.t
 ```
 
 ### Tremolo
 
-Module: `ToneJs_Tremolo`
+Module: `Tone.Tremolo`
 
 LFO-controlled amplitude modulation.
 
@@ -920,11 +920,11 @@ type options = {
 make: unit => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
-depth: t => ToneJs_Param.t
+frequency: t => Param.t
+depth: t => Param.t
 getType / setType: oscillatorType
 spread / setSpread: degrees
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 start: (t, ~time: time=?) => t
 stop: (t, ~time: time=?) => t
 sync: t => t
@@ -933,7 +933,7 @@ unsync: t => t
 
 ### Vibrato
 
-Module: `ToneJs_Vibrato`
+Module: `Tone.Vibrato`
 
 LFO-controlled pitch modulation.
 
@@ -946,15 +946,15 @@ type options = {
 make: unit => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
-depth: t => ToneJs_Param.t
+frequency: t => Param.t
+depth: t => Param.t
 getType / setType: oscillatorType
-wet: t => ToneJs_Param.t
+wet: t => Param.t
 ```
 
 ### FrequencyShifter
 
-Module: `ToneJs_FrequencyShifter`
+Module: `Tone.FrequencyShifter`
 
 Frequency shifting effect.
 
@@ -964,13 +964,13 @@ type options = { frequency?: frequency, wet?: normalRange }
 make: unit => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+frequency: t => Param.t
+wet: t => Param.t
 ```
 
 ### StereoWidener
 
-Module: `ToneJs_StereoWidener`
+Module: `Tone.StereoWidener`
 
 Stereo width control.
 
@@ -980,8 +980,8 @@ type options = { width?: normalRange, wet?: normalRange }
 make: unit => t
 makeWithOptions: options => t
 
-width: t => ToneJs_Param.t
-wet: t => ToneJs_Param.t
+width: t => Param.t
+wet: t => Param.t
 ```
 
 ---
@@ -990,7 +990,7 @@ wet: t => ToneJs_Param.t
 
 ### Compressor
 
-Module: `ToneJs_Compressor`
+Module: `Tone.Compressor`
 
 Dynamic range compressor.
 
@@ -1005,19 +1005,19 @@ makeWithThreshold: decibels => t
 makeWithThresholdRatio: (decibels, positive) => t
 makeWithOptions: options => t
 
-threshold: t => ToneJs_Param.t
-ratio: t => ToneJs_Param.t
-attack: t => ToneJs_Param.t
-release: t => ToneJs_Param.t
-knee: t => ToneJs_Param.t
+threshold: t => Param.t
+ratio: t => Param.t
+attack: t => Param.t
+release: t => Param.t
+knee: t => Param.t
 reduction: t => decibels              // @get (read-only)
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Limiter
 
-Module: `ToneJs_Limiter`
+Module: `Tone.Limiter`
 
 Peak limiter.
 
@@ -1028,15 +1028,15 @@ make: unit => t
 makeWithThreshold: decibels => t
 makeWithOptions: options => t
 
-threshold: t => ToneJs_Param.t
+threshold: t => Param.t
 reduction: t => decibels               // @get (read-only)
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Gate
 
-Module: `ToneJs_Gate`
+Module: `Tone.Gate`
 
 Noise gate.
 
@@ -1047,15 +1047,15 @@ make: unit => t
 makeWithThreshold: decibels => t
 makeWithOptions: options => t
 
-threshold: t => ToneJs_Param.t
+threshold: t => Param.t
 smoothing / setSmoothing: time
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Filter
 
-Module: `ToneJs_Filter`
+Module: `Tone.Filter`
 
 Multi-type biquad filter.
 
@@ -1072,20 +1072,20 @@ make: unit => t
 makeWithFreq: frequency => t
 makeWithOptions: options => t
 
-frequency: t => ToneJs_Param.t
-q: t => ToneJs_Param.t
-gain: t => ToneJs_Param.t
-detune: t => ToneJs_Param.t
+frequency: t => Param.t
+q: t => Param.t
+gain: t => Param.t
+detune: t => Param.t
 getType / setType: filterType
 rolloff / setRolloff: rolloff
 getFrequencyResponse: (t, int) => array<float>
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### EQ3
 
-Module: `ToneJs_EQ3`
+Module: `Tone.EQ3`
 
 3-band equalizer.
 
@@ -1098,18 +1098,18 @@ type options = {
 make: unit => t
 makeWithOptions: options => t
 
-low: t => ToneJs_Param.t
-mid: t => ToneJs_Param.t
-high: t => ToneJs_Param.t
-lowFrequency: t => ToneJs_Param.t
-highFrequency: t => ToneJs_Param.t
+low: t => Param.t
+mid: t => Param.t
+high: t => Param.t
+lowFrequency: t => Param.t
+highFrequency: t => Param.t
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Panner
 
-Module: `ToneJs_Panner`
+Module: `Tone.Panner`
 
 Stereo panning.
 
@@ -1120,9 +1120,9 @@ make: unit => t
 makeWithPan: audioRange => t
 makeWithOptions: options => t
 
-pan: t => ToneJs_Param.t              // -1.0 (left) to 1.0 (right)
+pan: t => Param.t              // -1.0 (left) to 1.0 (right)
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ---
@@ -1131,7 +1131,7 @@ asAudioNode: t => ToneJs_AudioNode.t
 
 ### Signal
 
-Module: `ToneJs_Signal`
+Module: `Tone.Signal`
 
 A schedulable signal that can be connected in the audio graph.
 
@@ -1161,15 +1161,15 @@ setTargetAtTime: (t, float, time, float) => t
 cancelScheduledValues / cancelAndHoldAtTime: (t, time) => t
 
 // Routing
-connect: (t, ToneJs_AudioNode.t) => t
+connect: (t, AudioNode.t) => t
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
-asParam: t => ToneJs_Param.t
+asAudioNode: t => AudioNode.t
+asParam: t => Param.t
 ```
 
 ### Volume
 
-Module: `ToneJs_Volume`
+Module: `Tone.Volume`
 
 Volume control with mute.
 
@@ -1180,15 +1180,15 @@ make: unit => t
 makeWithVolume: decibels => t
 makeWithOptions: options => t
 
-volume: t => ToneJs_Param.t
+volume: t => Param.t
 mute / setMute: bool
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Gain
 
-Module: `ToneJs_Gain`
+Module: `Tone.Gain`
 
 Basic gain node.
 
@@ -1199,14 +1199,14 @@ make: unit => t
 makeWithGain: gainFactor => t
 makeWithOptions: options => t
 
-gain: t => ToneJs_Param.t
+gain: t => Param.t
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### Channel
 
-Module: `ToneJs_Channel`
+Module: `Tone.Channel`
 
 Audio channel with pan, volume, solo, mute, and bus routing.
 
@@ -1221,24 +1221,24 @@ makeWithVolume: decibels => t
 makeWithVolumePan: (decibels, audioRange) => t
 makeWithOptions: options => t
 
-pan: t => ToneJs_Param.t
-volume: t => ToneJs_Param.t
+pan: t => Param.t
+volume: t => Param.t
 solo / setSolo: bool
 mute / setMute: bool
 muted: t => bool                   // @get (read-only, true when solo'd out)
 
 // Bus routing
-send: (t, string) => ToneJs_Gain.t
-sendWithVolume: (t, string, ~volume: decibels=?) => ToneJs_Gain.t
+send: (t, string) => Gain.t
+sendWithVolume: (t, string, ~volume: decibels=?) => Gain.t
 receive: (t, string) => t
 
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ### CrossFade
 
-Module: `ToneJs_CrossFade`
+Module: `Tone.CrossFade`
 
 Crossfade between two inputs.
 
@@ -1249,11 +1249,11 @@ make: unit => t
 makeWithFade: normalRange => t
 makeWithOptions: options => t
 
-fade: t => ToneJs_Param.t             // 0 = input A, 1 = input B
-a: t => ToneJs_Gain.t
-b: t => ToneJs_Gain.t
+fade: t => Param.t             // 0 = input A, 1 = input B
+a: t => Gain.t
+b: t => Gain.t
 dispose: t => t
-asAudioNode: t => ToneJs_AudioNode.t
+asAudioNode: t => AudioNode.t
 ```
 
 ---
@@ -1264,7 +1264,7 @@ All scheduling modules work with the Transport. Start the transport to begin pla
 
 ### Loop
 
-Module: `ToneJs_Loop`
+Module: `Tone.Loop`
 
 Repeating callback at a set interval.
 
@@ -1298,7 +1298,7 @@ callback / setCallback: seconds => unit
 
 ### Event
 
-Module: `ToneJs_Event`
+Module: `Tone.Event`
 
 A single schedulable event.
 
@@ -1325,7 +1325,7 @@ humanize / setHumanize: bool
 
 ### Part
 
-Module: `ToneJs_Part`
+Module: `Tone.Part`
 
 A collection of events on a timeline.
 
@@ -1343,7 +1343,7 @@ dispose: t => t
 // Event management
 add: (t, time, 'a) => t
 remove: (t, time, 'a) => t
-at: (t, time) => Null.t<ToneJs_Event.t>
+at: (t, time) => Null.t<Event.t>
 
 // Properties
 state: t => basicPlaybackState
@@ -1361,7 +1361,7 @@ humanize / setHumanize: bool
 
 ### Sequence
 
-Module: `ToneJs_Sequence`
+Module: `Tone.Sequence`
 
 An ordered series of events played at a subdivision.
 

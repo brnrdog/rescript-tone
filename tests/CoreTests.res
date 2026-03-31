@@ -1,4 +1,4 @@
-open ToneJs_Types
+open Types
 open Zekr
 
 // Note: Tone.js has limited functionality in Node.js (no AudioContext).
@@ -7,54 +7,54 @@ open Zekr
 
 let toneModuleSuite = suite("Tone Module", [
   test("version is a non-empty string", () => {
-    let v = ToneJs_Tone.version
+    let v = Core.version
     assertTrue(String.length(v) > 0)
   }),
   test("now() returns a non-negative number", () => {
-    let t = ToneJs_Tone.now()
+    let t = Core.now()
     assertTrue(t >= 0.0)
   }),
   test("immediate() returns a non-negative number", () => {
-    let t = ToneJs_Tone.immediate()
+    let t = Core.immediate()
     assertTrue(t >= 0.0)
   }),
   test("getContext returns a context object", () => {
-    let ctx = ToneJs_Tone.getContext()
-    let t = ToneJs_Context.now(ctx)
+    let ctx = Core.getContext()
+    let t = Context.now(ctx)
     assertTrue(t >= 0.0)
   }),
   test("getTransport returns a transport object", () => {
-    let _transport = ToneJs_Tone.getTransport()
+    let _transport = Core.getTransport()
     Pass
   }),
   test("getDestination returns a destination object", () => {
-    let _dest = ToneJs_Tone.getDestination()
+    let _dest = Core.getDestination()
     Pass
   }),
 ])
 
 let contextSuite = suite("Context", [
   test("now() returns a non-negative time", () => {
-    let ctx = ToneJs_Tone.getContext()
-    let t = ToneJs_Context.now(ctx)
+    let ctx = Core.getContext()
+    let t = Context.now(ctx)
     assertTrue(t >= 0.0)
   }),
   test("immediate() returns a non-negative time", () => {
-    let ctx = ToneJs_Tone.getContext()
-    let t = ToneJs_Context.immediate(ctx)
+    let ctx = Core.getContext()
+    let t = Context.immediate(ctx)
     assertTrue(t >= 0.0)
   }),
   test("currentTime is non-negative", () => {
-    let ctx = ToneJs_Tone.getContext()
-    let t = ToneJs_Context.currentTime(ctx)
+    let ctx = Core.getContext()
+    let t = Context.currentTime(ctx)
     assertTrue(t >= 0.0)
   }),
   test("lookAhead can be get and set", () => {
-    let ctx = ToneJs_Tone.getContext()
-    let original = ToneJs_Context.lookAhead(ctx)
-    ToneJs_Context.setLookAhead(ctx, 0.2)
-    let updated = ToneJs_Context.lookAhead(ctx)
-    ToneJs_Context.setLookAhead(ctx, original)
+    let ctx = Core.getContext()
+    let original = Context.lookAhead(ctx)
+    Context.setLookAhead(ctx, 0.2)
+    let updated = Context.lookAhead(ctx)
+    Context.setLookAhead(ctx, original)
     assertTrue(updated == 0.2)
   }),
 ])
@@ -78,60 +78,60 @@ let paramSuite = suite("Param", [
   test("Param bindings compile correctly", () => {
     // Verify the binding types are correct at compile time
     // Param methods require a real AudioContext to test at runtime
-    let _ = ToneJs_Param.getValue
-    let _ = ToneJs_Param.setValue
-    let _ = ToneJs_Param.rampTo
-    let _ = ToneJs_Param.linearRampTo
-    let _ = ToneJs_Param.exponentialRampTo
-    let _ = ToneJs_Param.cancelScheduledValues
+    let _ = Param.getValue
+    let _ = Param.setValue
+    let _ = Param.rampTo
+    let _ = Param.linearRampTo
+    let _ = Param.exponentialRampTo
+    let _ = Param.cancelScheduledValues
     Pass
   }),
 ])
 
 let audioNodeSuite = suite("AudioNode", [
   test("AudioNode bindings compile correctly", () => {
-    let _ = ToneJs_AudioNode.connect
-    let _ = ToneJs_AudioNode.disconnect
-    let _ = ToneJs_AudioNode.toDestination
-    let _ = ToneJs_AudioNode.dispose
-    let _ = ToneJs_AudioNode.chain
-    let _ = ToneJs_AudioNode.fan
-    let _ = ToneJs_AudioNode.numberOfInputs
-    let _ = ToneJs_AudioNode.numberOfOutputs
+    let _ = AudioNode.connect
+    let _ = AudioNode.disconnect
+    let _ = AudioNode.toDestination
+    let _ = AudioNode.dispose
+    let _ = AudioNode.chain
+    let _ = AudioNode.fan
+    let _ = AudioNode.numberOfInputs
+    let _ = AudioNode.numberOfOutputs
     Pass
   }),
 ])
 
 let transportSuite = suite("Transport", [
   test("Transport bindings compile correctly", () => {
-    let _ = ToneJs_Transport.start
-    let _ = ToneJs_Transport.stop
-    let _ = ToneJs_Transport.pause
-    let _ = ToneJs_Transport.toggle
-    let _ = ToneJs_Transport.schedule
-    let _ = ToneJs_Transport.scheduleRepeat
-    let _ = ToneJs_Transport.scheduleOnce
-    let _ = ToneJs_Transport.clear
-    let _ = ToneJs_Transport.cancel
-    let _ = ToneJs_Transport.bpm
-    let _ = ToneJs_Transport.position
-    let _ = ToneJs_Transport.setPosition
-    let _ = ToneJs_Transport.loop
-    let _ = ToneJs_Transport.setLoop
-    let _ = ToneJs_Transport.state
-    let _ = ToneJs_Transport.ppq
+    let _ = Transport.start
+    let _ = Transport.stop
+    let _ = Transport.pause
+    let _ = Transport.toggle
+    let _ = Transport.schedule
+    let _ = Transport.scheduleRepeat
+    let _ = Transport.scheduleOnce
+    let _ = Transport.clear
+    let _ = Transport.cancel
+    let _ = Transport.bpm
+    let _ = Transport.position
+    let _ = Transport.setPosition
+    let _ = Transport.loop
+    let _ = Transport.setLoop
+    let _ = Transport.state
+    let _ = Transport.ppq
     Pass
   }),
 ])
 
 let destinationSuite = suite("Destination", [
   test("Destination bindings compile correctly", () => {
-    let _ = ToneJs_Destination.volume
-    let _ = ToneJs_Destination.mute
-    let _ = ToneJs_Destination.setMute
-    let _ = ToneJs_Destination.maxChannelCount
-    let _ = ToneJs_Destination.dispose
-    let _ = ToneJs_Destination.asAudioNode
+    let _ = Destination.volume
+    let _ = Destination.mute
+    let _ = Destination.setMute
+    let _ = Destination.maxChannelCount
+    let _ = Destination.dispose
+    let _ = Destination.asAudioNode
     Pass
   }),
 ])
