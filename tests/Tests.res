@@ -5,6 +5,7 @@ let allSuites = Array.flat([
   SourceTests.suites,
   EffectTests.suites,
   SignalTests.suites,
+  SchedulingTests.suites,
 ])
 
 runSuites(allSuites)
