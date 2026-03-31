@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/brnrdog/rescript-tone/compare/v1.0.0...v1.1.0) (2026-03-31)
+
+
+### Features
+
+* rename RescriptTone namespace to Tone ([6f9d56f](https://github.com/brnrdog/rescript-tone/commit/6f9d56f21e9fad6cb159111b6512f77835104812))
+
 # 1.0.0 (2026-03-31)
 
 
