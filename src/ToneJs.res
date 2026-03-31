@@ -56,3 +56,9 @@ module Volume = ToneJs_Volume
 module Gain = ToneJs_Gain
 module Channel = ToneJs_Channel
 module CrossFade = ToneJs_CrossFade
+
+// Scheduling
+module Loop = ToneJs_Loop
+module Event = ToneJs_Event
+module Part = ToneJs_Part
+module Sequence = ToneJs_Sequence
