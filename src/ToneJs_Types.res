@@ -50,6 +50,33 @@ type oversampleType =
   | @as("2x") TwoX
   | @as("4x") FourX
 
+// Common option types shared across modules
+type envelopeOptions = {
+  attack?: time,
+  decay?: time,
+  sustain?: normalRange,
+  release?: time,
+}
+
+type filterEnvelopeOptions = {
+  attack?: time,
+  decay?: time,
+  sustain?: normalRange,
+  release?: time,
+  baseFrequency?: frequency,
+  octaves?: positive,
+  exponent?: positive,
+}
+
+type oscillatorOptions = {\"type"?: oscillatorType}
+
+type filterOptions = {
+  \"type"?: string,
+  frequency?: frequency,
+  rolloff?: int,
+  q?: positive,
+}
+
 // Helpers to create time values
 module Time = {
   external fromFloat: float => time = "%identity"
