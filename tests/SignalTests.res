@@ -2,96 +2,96 @@ open Zekr
 
 let signalSuite = suite("Signal", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Signal.make
-    let _ = ToneJs_Signal.makeWithValue
-    let _ = ToneJs_Signal.makeWithOptions
-    let _ = ToneJs_Signal.getValue
-    let _ = ToneJs_Signal.setValue
-    let _ = ToneJs_Signal.overridden
-    let _ = ToneJs_Signal.setOverridden
-    let _ = ToneJs_Signal.maxValue
-    let _ = ToneJs_Signal.minValue
-    let _ = ToneJs_Signal.units
-    let _ = ToneJs_Signal.convert
-    let _ = ToneJs_Signal.setConvert
-    let _ = ToneJs_Signal.setValueAtTime
-    let _ = ToneJs_Signal.getValueAtTime
-    let _ = ToneJs_Signal.linearRampToValueAtTime
-    let _ = ToneJs_Signal.exponentialRampToValueAtTime
-    let _ = ToneJs_Signal.linearRampTo
-    let _ = ToneJs_Signal.exponentialRampTo
-    let _ = ToneJs_Signal.targetRampTo
-    let _ = ToneJs_Signal.rampTo
-    let _ = ToneJs_Signal.setRampPoint
-    let _ = ToneJs_Signal.setTargetAtTime
-    let _ = ToneJs_Signal.cancelScheduledValues
-    let _ = ToneJs_Signal.cancelAndHoldAtTime
-    let _ = ToneJs_Signal.connect
-    let _ = ToneJs_Signal.dispose
-    let _ = ToneJs_Signal.asAudioNode
-    let _ = ToneJs_Signal.asParam
+    let _ = Signal.make
+    let _ = Signal.makeWithValue
+    let _ = Signal.makeWithOptions
+    let _ = Signal.getValue
+    let _ = Signal.setValue
+    let _ = Signal.overridden
+    let _ = Signal.setOverridden
+    let _ = Signal.maxValue
+    let _ = Signal.minValue
+    let _ = Signal.units
+    let _ = Signal.convert
+    let _ = Signal.setConvert
+    let _ = Signal.setValueAtTime
+    let _ = Signal.getValueAtTime
+    let _ = Signal.linearRampToValueAtTime
+    let _ = Signal.exponentialRampToValueAtTime
+    let _ = Signal.linearRampTo
+    let _ = Signal.exponentialRampTo
+    let _ = Signal.targetRampTo
+    let _ = Signal.rampTo
+    let _ = Signal.setRampPoint
+    let _ = Signal.setTargetAtTime
+    let _ = Signal.cancelScheduledValues
+    let _ = Signal.cancelAndHoldAtTime
+    let _ = Signal.connect
+    let _ = Signal.dispose
+    let _ = Signal.asAudioNode
+    let _ = Signal.asParam
     Pass
   }),
 ])
 
 let volumeSuite = suite("Volume", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Volume.make
-    let _ = ToneJs_Volume.makeWithVolume
-    let _ = ToneJs_Volume.makeWithOptions
-    let _ = ToneJs_Volume.volume
-    let _ = ToneJs_Volume.mute
-    let _ = ToneJs_Volume.setMute
-    let _ = ToneJs_Volume.dispose
-    let _ = ToneJs_Volume.asAudioNode
+    let _ = Volume.make
+    let _ = Volume.makeWithVolume
+    let _ = Volume.makeWithOptions
+    let _ = Volume.volume
+    let _ = Volume.mute
+    let _ = Volume.setMute
+    let _ = Volume.dispose
+    let _ = Volume.asAudioNode
     Pass
   }),
 ])
 
 let gainSuite = suite("Gain", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Gain.make
-    let _ = ToneJs_Gain.makeWithGain
-    let _ = ToneJs_Gain.makeWithOptions
-    let _ = ToneJs_Gain.gain
-    let _ = ToneJs_Gain.dispose
-    let _ = ToneJs_Gain.asAudioNode
+    let _ = Gain.make
+    let _ = Gain.makeWithGain
+    let _ = Gain.makeWithOptions
+    let _ = Gain.gain
+    let _ = Gain.dispose
+    let _ = Gain.asAudioNode
     Pass
   }),
 ])
 
 let channelSuite = suite("Channel", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Channel.make
-    let _ = ToneJs_Channel.makeWithVolume
-    let _ = ToneJs_Channel.makeWithVolumePan
-    let _ = ToneJs_Channel.makeWithOptions
-    let _ = ToneJs_Channel.pan
-    let _ = ToneJs_Channel.volume
-    let _ = ToneJs_Channel.solo
-    let _ = ToneJs_Channel.setSolo
-    let _ = ToneJs_Channel.mute
-    let _ = ToneJs_Channel.setMute
-    let _ = ToneJs_Channel.muted
-    let _ = ToneJs_Channel.send
-    let _ = ToneJs_Channel.sendWithVolume
-    let _ = ToneJs_Channel.receive
-    let _ = ToneJs_Channel.dispose
-    let _ = ToneJs_Channel.asAudioNode
+    let _ = Channel.make
+    let _ = Channel.makeWithVolume
+    let _ = Channel.makeWithVolumePan
+    let _ = Channel.makeWithOptions
+    let _ = Channel.pan
+    let _ = Channel.volume
+    let _ = Channel.solo
+    let _ = Channel.setSolo
+    let _ = Channel.mute
+    let _ = Channel.setMute
+    let _ = Channel.muted
+    let _ = Channel.send
+    let _ = Channel.sendWithVolume
+    let _ = Channel.receive
+    let _ = Channel.dispose
+    let _ = Channel.asAudioNode
     Pass
   }),
 ])
 
 let crossFadeSuite = suite("CrossFade", [
   test("bindings type-check", () => {
-    let _ = ToneJs_CrossFade.make
-    let _ = ToneJs_CrossFade.makeWithFade
-    let _ = ToneJs_CrossFade.makeWithOptions
-    let _ = ToneJs_CrossFade.fade
-    let _ = ToneJs_CrossFade.a
-    let _ = ToneJs_CrossFade.b
-    let _ = ToneJs_CrossFade.dispose
-    let _ = ToneJs_CrossFade.asAudioNode
+    let _ = CrossFade.make
+    let _ = CrossFade.makeWithFade
+    let _ = CrossFade.makeWithOptions
+    let _ = CrossFade.fade
+    let _ = CrossFade.a
+    let _ = CrossFade.b
+    let _ = CrossFade.dispose
+    let _ = CrossFade.asAudioNode
     Pass
   }),
 ])

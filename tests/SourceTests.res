@@ -6,179 +6,179 @@ open Zekr
 
 let synthSuite = suite("Synth", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Synth.make
-    let _ = ToneJs_Synth.makeWithOptions
-    let _ = ToneJs_Synth.triggerAttack
-    let _ = ToneJs_Synth.triggerAttackAt
-    let _ = ToneJs_Synth.triggerAttackAtVel
-    let _ = ToneJs_Synth.triggerRelease
-    let _ = ToneJs_Synth.triggerAttackRelease
-    let _ = ToneJs_Synth.triggerAttackReleaseAt
-    let _ = ToneJs_Synth.triggerAttackReleaseAtVel
-    let _ = ToneJs_Synth.volume
-    let _ = ToneJs_Synth.frequency
-    let _ = ToneJs_Synth.detune
-    let _ = ToneJs_Synth.dispose
-    let _ = ToneJs_Synth.sync
-    let _ = ToneJs_Synth.unsync
-    let _ = ToneJs_Synth.asAudioNode
+    let _ = Synth.make
+    let _ = Synth.makeWithOptions
+    let _ = Synth.triggerAttack
+    let _ = Synth.triggerAttackAt
+    let _ = Synth.triggerAttackAtVel
+    let _ = Synth.triggerRelease
+    let _ = Synth.triggerAttackRelease
+    let _ = Synth.triggerAttackReleaseAt
+    let _ = Synth.triggerAttackReleaseAtVel
+    let _ = Synth.volume
+    let _ = Synth.frequency
+    let _ = Synth.detune
+    let _ = Synth.dispose
+    let _ = Synth.sync
+    let _ = Synth.unsync
+    let _ = Synth.asAudioNode
     Pass
   }),
 ])
 
 let amSynthSuite = suite("AMSynth", [
   test("bindings type-check", () => {
-    let _ = ToneJs_AMSynth.make
-    let _ = ToneJs_AMSynth.makeWithOptions
-    let _ = ToneJs_AMSynth.triggerAttack
-    let _ = ToneJs_AMSynth.triggerAttackAt
-    let _ = ToneJs_AMSynth.triggerAttackAtVel
-    let _ = ToneJs_AMSynth.triggerRelease
-    let _ = ToneJs_AMSynth.triggerAttackRelease
-    let _ = ToneJs_AMSynth.volume
-    let _ = ToneJs_AMSynth.frequency
-    let _ = ToneJs_AMSynth.detune
-    let _ = ToneJs_AMSynth.dispose
-    let _ = ToneJs_AMSynth.sync
-    let _ = ToneJs_AMSynth.unsync
-    let _ = ToneJs_AMSynth.asAudioNode
+    let _ = AMSynth.make
+    let _ = AMSynth.makeWithOptions
+    let _ = AMSynth.triggerAttack
+    let _ = AMSynth.triggerAttackAt
+    let _ = AMSynth.triggerAttackAtVel
+    let _ = AMSynth.triggerRelease
+    let _ = AMSynth.triggerAttackRelease
+    let _ = AMSynth.volume
+    let _ = AMSynth.frequency
+    let _ = AMSynth.detune
+    let _ = AMSynth.dispose
+    let _ = AMSynth.sync
+    let _ = AMSynth.unsync
+    let _ = AMSynth.asAudioNode
     Pass
   }),
 ])
 
 let fmSynthSuite = suite("FMSynth", [
   test("bindings type-check", () => {
-    let _ = ToneJs_FMSynth.make
-    let _ = ToneJs_FMSynth.makeWithOptions
-    let _ = ToneJs_FMSynth.triggerAttack
-    let _ = ToneJs_FMSynth.triggerRelease
-    let _ = ToneJs_FMSynth.triggerAttackRelease
-    let _ = ToneJs_FMSynth.volume
-    let _ = ToneJs_FMSynth.frequency
-    let _ = ToneJs_FMSynth.detune
-    let _ = ToneJs_FMSynth.dispose
-    let _ = ToneJs_FMSynth.asAudioNode
+    let _ = FMSynth.make
+    let _ = FMSynth.makeWithOptions
+    let _ = FMSynth.triggerAttack
+    let _ = FMSynth.triggerRelease
+    let _ = FMSynth.triggerAttackRelease
+    let _ = FMSynth.volume
+    let _ = FMSynth.frequency
+    let _ = FMSynth.detune
+    let _ = FMSynth.dispose
+    let _ = FMSynth.asAudioNode
     Pass
   }),
 ])
 
 let monoSynthSuite = suite("MonoSynth", [
   test("bindings type-check", () => {
-    let _ = ToneJs_MonoSynth.make
-    let _ = ToneJs_MonoSynth.makeWithOptions
-    let _ = ToneJs_MonoSynth.triggerAttack
-    let _ = ToneJs_MonoSynth.triggerRelease
-    let _ = ToneJs_MonoSynth.triggerAttackRelease
-    let _ = ToneJs_MonoSynth.volume
-    let _ = ToneJs_MonoSynth.frequency
-    let _ = ToneJs_MonoSynth.detune
-    let _ = ToneJs_MonoSynth.dispose
-    let _ = ToneJs_MonoSynth.asAudioNode
+    let _ = MonoSynth.make
+    let _ = MonoSynth.makeWithOptions
+    let _ = MonoSynth.triggerAttack
+    let _ = MonoSynth.triggerRelease
+    let _ = MonoSynth.triggerAttackRelease
+    let _ = MonoSynth.volume
+    let _ = MonoSynth.frequency
+    let _ = MonoSynth.detune
+    let _ = MonoSynth.dispose
+    let _ = MonoSynth.asAudioNode
     Pass
   }),
 ])
 
 let polySynthSuite = suite("PolySynth", [
   test("bindings type-check", () => {
-    let _ = ToneJs_PolySynth.make
-    let _ = ToneJs_PolySynth.makeWithOptions
-    let _ = ToneJs_PolySynth.triggerAttack
-    let _ = ToneJs_PolySynth.triggerAttackNote
-    let _ = ToneJs_PolySynth.triggerRelease
-    let _ = ToneJs_PolySynth.triggerReleaseNote
-    let _ = ToneJs_PolySynth.triggerAttackRelease
-    let _ = ToneJs_PolySynth.triggerAttackReleaseNote
-    let _ = ToneJs_PolySynth.releaseAll
-    let _ = ToneJs_PolySynth.activeVoices
-    let _ = ToneJs_PolySynth.maxPolyphony
-    let _ = ToneJs_PolySynth.setMaxPolyphony
-    let _ = ToneJs_PolySynth.dispose
-    let _ = ToneJs_PolySynth.asAudioNode
+    let _ = PolySynth.make
+    let _ = PolySynth.makeWithOptions
+    let _ = PolySynth.triggerAttack
+    let _ = PolySynth.triggerAttackNote
+    let _ = PolySynth.triggerRelease
+    let _ = PolySynth.triggerReleaseNote
+    let _ = PolySynth.triggerAttackRelease
+    let _ = PolySynth.triggerAttackReleaseNote
+    let _ = PolySynth.releaseAll
+    let _ = PolySynth.activeVoices
+    let _ = PolySynth.maxPolyphony
+    let _ = PolySynth.setMaxPolyphony
+    let _ = PolySynth.dispose
+    let _ = PolySynth.asAudioNode
     Pass
   }),
 ])
 
 let oscillatorSuite = suite("Oscillator", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Oscillator.make
-    let _ = ToneJs_Oscillator.makeWithOptions
-    let _ = ToneJs_Oscillator.makeWithFreq
-    let _ = ToneJs_Oscillator.start
-    let _ = ToneJs_Oscillator.stop
-    let _ = ToneJs_Oscillator.restart
-    let _ = ToneJs_Oscillator.frequency
-    let _ = ToneJs_Oscillator.detune
-    let _ = ToneJs_Oscillator.volume
-    let _ = ToneJs_Oscillator.getType
-    let _ = ToneJs_Oscillator.setType
-    let _ = ToneJs_Oscillator.phase
-    let _ = ToneJs_Oscillator.setPhase
-    let _ = ToneJs_Oscillator.partialCount
-    let _ = ToneJs_Oscillator.setPartialCount
-    let _ = ToneJs_Oscillator.partials
-    let _ = ToneJs_Oscillator.setPartials
-    let _ = ToneJs_Oscillator.syncFrequency
-    let _ = ToneJs_Oscillator.unsyncFrequency
-    let _ = ToneJs_Oscillator.dispose
-    let _ = ToneJs_Oscillator.asAudioNode
+    let _ = Oscillator.make
+    let _ = Oscillator.makeWithOptions
+    let _ = Oscillator.makeWithFreq
+    let _ = Oscillator.start
+    let _ = Oscillator.stop
+    let _ = Oscillator.restart
+    let _ = Oscillator.frequency
+    let _ = Oscillator.detune
+    let _ = Oscillator.volume
+    let _ = Oscillator.getType
+    let _ = Oscillator.setType
+    let _ = Oscillator.phase
+    let _ = Oscillator.setPhase
+    let _ = Oscillator.partialCount
+    let _ = Oscillator.setPartialCount
+    let _ = Oscillator.partials
+    let _ = Oscillator.setPartials
+    let _ = Oscillator.syncFrequency
+    let _ = Oscillator.unsyncFrequency
+    let _ = Oscillator.dispose
+    let _ = Oscillator.asAudioNode
     Pass
   }),
 ])
 
 let playerSuite = suite("Player", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Player.make
-    let _ = ToneJs_Player.makeWithOptions
-    let _ = ToneJs_Player.start
-    let _ = ToneJs_Player.startWithOffset
-    let _ = ToneJs_Player.startWithOffsetDuration
-    let _ = ToneJs_Player.stop
-    let _ = ToneJs_Player.restart
-    let _ = ToneJs_Player.seek
-    let _ = ToneJs_Player.seekAt
-    let _ = ToneJs_Player.load
-    let _ = ToneJs_Player.loaded
-    let _ = ToneJs_Player.loop
-    let _ = ToneJs_Player.setLoop
-    let _ = ToneJs_Player.loopStart
-    let _ = ToneJs_Player.setLoopStart
-    let _ = ToneJs_Player.loopEnd
-    let _ = ToneJs_Player.setLoopEnd
-    let _ = ToneJs_Player.setLoopPoints
-    let _ = ToneJs_Player.playbackRate
-    let _ = ToneJs_Player.setPlaybackRate
-    let _ = ToneJs_Player.reverse
-    let _ = ToneJs_Player.setReverse
-    let _ = ToneJs_Player.autostart
-    let _ = ToneJs_Player.setAutostart
-    let _ = ToneJs_Player.fadeIn
-    let _ = ToneJs_Player.setFadeIn
-    let _ = ToneJs_Player.fadeOut
-    let _ = ToneJs_Player.setFadeOut
-    let _ = ToneJs_Player.dispose
-    let _ = ToneJs_Player.asAudioNode
+    let _ = Player.make
+    let _ = Player.makeWithOptions
+    let _ = Player.start
+    let _ = Player.startWithOffset
+    let _ = Player.startWithOffsetDuration
+    let _ = Player.stop
+    let _ = Player.restart
+    let _ = Player.seek
+    let _ = Player.seekAt
+    let _ = Player.load
+    let _ = Player.loaded
+    let _ = Player.loop
+    let _ = Player.setLoop
+    let _ = Player.loopStart
+    let _ = Player.setLoopStart
+    let _ = Player.loopEnd
+    let _ = Player.setLoopEnd
+    let _ = Player.setLoopPoints
+    let _ = Player.playbackRate
+    let _ = Player.setPlaybackRate
+    let _ = Player.reverse
+    let _ = Player.setReverse
+    let _ = Player.autostart
+    let _ = Player.setAutostart
+    let _ = Player.fadeIn
+    let _ = Player.setFadeIn
+    let _ = Player.fadeOut
+    let _ = Player.setFadeOut
+    let _ = Player.dispose
+    let _ = Player.asAudioNode
     Pass
   }),
 ])
 
 let noiseSuite = suite("Noise", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Noise.make
-    let _ = ToneJs_Noise.makeWithOptions
-    let _ = ToneJs_Noise.start
-    let _ = ToneJs_Noise.stop
-    let _ = ToneJs_Noise.restart
-    let _ = ToneJs_Noise.volume
-    let _ = ToneJs_Noise.getType
-    let _ = ToneJs_Noise.setType
-    let _ = ToneJs_Noise.playbackRate
-    let _ = ToneJs_Noise.setPlaybackRate
-    let _ = ToneJs_Noise.fadeIn
-    let _ = ToneJs_Noise.setFadeIn
-    let _ = ToneJs_Noise.fadeOut
-    let _ = ToneJs_Noise.setFadeOut
-    let _ = ToneJs_Noise.dispose
-    let _ = ToneJs_Noise.asAudioNode
+    let _ = Noise.make
+    let _ = Noise.makeWithOptions
+    let _ = Noise.start
+    let _ = Noise.stop
+    let _ = Noise.restart
+    let _ = Noise.volume
+    let _ = Noise.getType
+    let _ = Noise.setType
+    let _ = Noise.playbackRate
+    let _ = Noise.setPlaybackRate
+    let _ = Noise.fadeIn
+    let _ = Noise.setFadeIn
+    let _ = Noise.fadeOut
+    let _ = Noise.setFadeOut
+    let _ = Noise.dispose
+    let _ = Noise.asAudioNode
     Pass
   }),
 ])

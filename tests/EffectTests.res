@@ -2,380 +2,380 @@ open Zekr
 
 let reverbSuite = suite("Reverb", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Reverb.make
-    let _ = ToneJs_Reverb.makeWithDecay
-    let _ = ToneJs_Reverb.makeWithOptions
-    let _ = ToneJs_Reverb.decay
-    let _ = ToneJs_Reverb.setDecay
-    let _ = ToneJs_Reverb.preDelay
-    let _ = ToneJs_Reverb.setPreDelay
-    let _ = ToneJs_Reverb.wet
-    let _ = ToneJs_Reverb.ready
-    let _ = ToneJs_Reverb.generate
-    let _ = ToneJs_Reverb.dispose
-    let _ = ToneJs_Reverb.asAudioNode
+    let _ = Reverb.make
+    let _ = Reverb.makeWithDecay
+    let _ = Reverb.makeWithOptions
+    let _ = Reverb.decay
+    let _ = Reverb.setDecay
+    let _ = Reverb.preDelay
+    let _ = Reverb.setPreDelay
+    let _ = Reverb.wet
+    let _ = Reverb.ready
+    let _ = Reverb.generate
+    let _ = Reverb.dispose
+    let _ = Reverb.asAudioNode
     Pass
   }),
 ])
 
 let feedbackDelaySuite = suite("FeedbackDelay", [
   test("bindings type-check", () => {
-    let _ = ToneJs_FeedbackDelay.make
-    let _ = ToneJs_FeedbackDelay.makeWithTime
-    let _ = ToneJs_FeedbackDelay.makeWithTimeFeedback
-    let _ = ToneJs_FeedbackDelay.makeWithOptions
-    let _ = ToneJs_FeedbackDelay.delayTime
-    let _ = ToneJs_FeedbackDelay.feedback
-    let _ = ToneJs_FeedbackDelay.wet
-    let _ = ToneJs_FeedbackDelay.dispose
-    let _ = ToneJs_FeedbackDelay.asAudioNode
+    let _ = FeedbackDelay.make
+    let _ = FeedbackDelay.makeWithTime
+    let _ = FeedbackDelay.makeWithTimeFeedback
+    let _ = FeedbackDelay.makeWithOptions
+    let _ = FeedbackDelay.delayTime
+    let _ = FeedbackDelay.feedback
+    let _ = FeedbackDelay.wet
+    let _ = FeedbackDelay.dispose
+    let _ = FeedbackDelay.asAudioNode
     Pass
   }),
 ])
 
 let chorusSuite = suite("Chorus", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Chorus.make
-    let _ = ToneJs_Chorus.makeWithArgs
-    let _ = ToneJs_Chorus.makeWithOptions
-    let _ = ToneJs_Chorus.frequency
-    let _ = ToneJs_Chorus.depth
-    let _ = ToneJs_Chorus.setDepth
-    let _ = ToneJs_Chorus.delayTime
-    let _ = ToneJs_Chorus.setDelayTime
-    let _ = ToneJs_Chorus.getType
-    let _ = ToneJs_Chorus.setType
-    let _ = ToneJs_Chorus.spread
-    let _ = ToneJs_Chorus.setSpread
-    let _ = ToneJs_Chorus.wet
-    let _ = ToneJs_Chorus.start
-    let _ = ToneJs_Chorus.stop
-    let _ = ToneJs_Chorus.sync
-    let _ = ToneJs_Chorus.unsync
-    let _ = ToneJs_Chorus.dispose
-    let _ = ToneJs_Chorus.asAudioNode
+    let _ = Chorus.make
+    let _ = Chorus.makeWithArgs
+    let _ = Chorus.makeWithOptions
+    let _ = Chorus.frequency
+    let _ = Chorus.depth
+    let _ = Chorus.setDepth
+    let _ = Chorus.delayTime
+    let _ = Chorus.setDelayTime
+    let _ = Chorus.getType
+    let _ = Chorus.setType
+    let _ = Chorus.spread
+    let _ = Chorus.setSpread
+    let _ = Chorus.wet
+    let _ = Chorus.start
+    let _ = Chorus.stop
+    let _ = Chorus.sync
+    let _ = Chorus.unsync
+    let _ = Chorus.dispose
+    let _ = Chorus.asAudioNode
     Pass
   }),
 ])
 
 let distortionSuite = suite("Distortion", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Distortion.make
-    let _ = ToneJs_Distortion.makeWithAmount
-    let _ = ToneJs_Distortion.makeWithOptions
-    let _ = ToneJs_Distortion.distortion
-    let _ = ToneJs_Distortion.setDistortion
-    let _ = ToneJs_Distortion.oversample
-    let _ = ToneJs_Distortion.setOversample
-    let _ = ToneJs_Distortion.wet
-    let _ = ToneJs_Distortion.dispose
-    let _ = ToneJs_Distortion.asAudioNode
+    let _ = Distortion.make
+    let _ = Distortion.makeWithAmount
+    let _ = Distortion.makeWithOptions
+    let _ = Distortion.distortion
+    let _ = Distortion.setDistortion
+    let _ = Distortion.oversample
+    let _ = Distortion.setOversample
+    let _ = Distortion.wet
+    let _ = Distortion.dispose
+    let _ = Distortion.asAudioNode
     Pass
   }),
 ])
 
 let autoFilterSuite = suite("AutoFilter", [
   test("bindings type-check", () => {
-    let _ = ToneJs_AutoFilter.make
-    let _ = ToneJs_AutoFilter.makeWithOptions
-    let _ = ToneJs_AutoFilter.frequency
-    let _ = ToneJs_AutoFilter.depth
-    let _ = ToneJs_AutoFilter.wet
-    let _ = ToneJs_AutoFilter.octaves
-    let _ = ToneJs_AutoFilter.setOctaves
-    let _ = ToneJs_AutoFilter.baseFrequency
-    let _ = ToneJs_AutoFilter.setBaseFrequency
-    let _ = ToneJs_AutoFilter.start
-    let _ = ToneJs_AutoFilter.stop
-    let _ = ToneJs_AutoFilter.dispose
-    let _ = ToneJs_AutoFilter.asAudioNode
+    let _ = AutoFilter.make
+    let _ = AutoFilter.makeWithOptions
+    let _ = AutoFilter.frequency
+    let _ = AutoFilter.depth
+    let _ = AutoFilter.wet
+    let _ = AutoFilter.octaves
+    let _ = AutoFilter.setOctaves
+    let _ = AutoFilter.baseFrequency
+    let _ = AutoFilter.setBaseFrequency
+    let _ = AutoFilter.start
+    let _ = AutoFilter.stop
+    let _ = AutoFilter.dispose
+    let _ = AutoFilter.asAudioNode
     Pass
   }),
 ])
 
 let autoPannerSuite = suite("AutoPanner", [
   test("bindings type-check", () => {
-    let _ = ToneJs_AutoPanner.make
-    let _ = ToneJs_AutoPanner.makeWithOptions
-    let _ = ToneJs_AutoPanner.frequency
-    let _ = ToneJs_AutoPanner.depth
-    let _ = ToneJs_AutoPanner.wet
-    let _ = ToneJs_AutoPanner.start
-    let _ = ToneJs_AutoPanner.stop
-    let _ = ToneJs_AutoPanner.dispose
-    let _ = ToneJs_AutoPanner.asAudioNode
+    let _ = AutoPanner.make
+    let _ = AutoPanner.makeWithOptions
+    let _ = AutoPanner.frequency
+    let _ = AutoPanner.depth
+    let _ = AutoPanner.wet
+    let _ = AutoPanner.start
+    let _ = AutoPanner.stop
+    let _ = AutoPanner.dispose
+    let _ = AutoPanner.asAudioNode
     Pass
   }),
 ])
 
 let autoWahSuite = suite("AutoWah", [
   test("bindings type-check", () => {
-    let _ = ToneJs_AutoWah.make
-    let _ = ToneJs_AutoWah.makeWithOptions
-    let _ = ToneJs_AutoWah.gain
-    let _ = ToneJs_AutoWah.q
-    let _ = ToneJs_AutoWah.wet
-    let _ = ToneJs_AutoWah.octaves
-    let _ = ToneJs_AutoWah.setOctaves
-    let _ = ToneJs_AutoWah.baseFrequency
-    let _ = ToneJs_AutoWah.setBaseFrequency
-    let _ = ToneJs_AutoWah.sensitivity
-    let _ = ToneJs_AutoWah.setSensitivity
-    let _ = ToneJs_AutoWah.dispose
-    let _ = ToneJs_AutoWah.asAudioNode
+    let _ = AutoWah.make
+    let _ = AutoWah.makeWithOptions
+    let _ = AutoWah.gain
+    let _ = AutoWah.q
+    let _ = AutoWah.wet
+    let _ = AutoWah.octaves
+    let _ = AutoWah.setOctaves
+    let _ = AutoWah.baseFrequency
+    let _ = AutoWah.setBaseFrequency
+    let _ = AutoWah.sensitivity
+    let _ = AutoWah.setSensitivity
+    let _ = AutoWah.dispose
+    let _ = AutoWah.asAudioNode
     Pass
   }),
 ])
 
 let bitCrusherSuite = suite("BitCrusher", [
   test("bindings type-check", () => {
-    let _ = ToneJs_BitCrusher.make
-    let _ = ToneJs_BitCrusher.makeWithBits
-    let _ = ToneJs_BitCrusher.makeWithOptions
-    let _ = ToneJs_BitCrusher.bits
-    let _ = ToneJs_BitCrusher.wet
-    let _ = ToneJs_BitCrusher.dispose
-    let _ = ToneJs_BitCrusher.asAudioNode
+    let _ = BitCrusher.make
+    let _ = BitCrusher.makeWithBits
+    let _ = BitCrusher.makeWithOptions
+    let _ = BitCrusher.bits
+    let _ = BitCrusher.wet
+    let _ = BitCrusher.dispose
+    let _ = BitCrusher.asAudioNode
     Pass
   }),
 ])
 
 let chebyshevSuite = suite("Chebyshev", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Chebyshev.make
-    let _ = ToneJs_Chebyshev.makeWithOrder
-    let _ = ToneJs_Chebyshev.makeWithOptions
-    let _ = ToneJs_Chebyshev.order
-    let _ = ToneJs_Chebyshev.setOrder
-    let _ = ToneJs_Chebyshev.oversample
-    let _ = ToneJs_Chebyshev.setOversample
-    let _ = ToneJs_Chebyshev.wet
-    let _ = ToneJs_Chebyshev.dispose
-    let _ = ToneJs_Chebyshev.asAudioNode
+    let _ = Chebyshev.make
+    let _ = Chebyshev.makeWithOrder
+    let _ = Chebyshev.makeWithOptions
+    let _ = Chebyshev.order
+    let _ = Chebyshev.setOrder
+    let _ = Chebyshev.oversample
+    let _ = Chebyshev.setOversample
+    let _ = Chebyshev.wet
+    let _ = Chebyshev.dispose
+    let _ = Chebyshev.asAudioNode
     Pass
   }),
 ])
 
 let freeverbSuite = suite("Freeverb", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Freeverb.make
-    let _ = ToneJs_Freeverb.makeWithOptions
-    let _ = ToneJs_Freeverb.roomSize
-    let _ = ToneJs_Freeverb.dampening
-    let _ = ToneJs_Freeverb.wet
-    let _ = ToneJs_Freeverb.dispose
-    let _ = ToneJs_Freeverb.asAudioNode
+    let _ = Freeverb.make
+    let _ = Freeverb.makeWithOptions
+    let _ = Freeverb.roomSize
+    let _ = Freeverb.dampening
+    let _ = Freeverb.wet
+    let _ = Freeverb.dispose
+    let _ = Freeverb.asAudioNode
     Pass
   }),
 ])
 
 let jcReverbSuite = suite("JCReverb", [
   test("bindings type-check", () => {
-    let _ = ToneJs_JCReverb.make
-    let _ = ToneJs_JCReverb.makeWithOptions
-    let _ = ToneJs_JCReverb.roomSize
-    let _ = ToneJs_JCReverb.wet
-    let _ = ToneJs_JCReverb.dispose
-    let _ = ToneJs_JCReverb.asAudioNode
+    let _ = JCReverb.make
+    let _ = JCReverb.makeWithOptions
+    let _ = JCReverb.roomSize
+    let _ = JCReverb.wet
+    let _ = JCReverb.dispose
+    let _ = JCReverb.asAudioNode
     Pass
   }),
 ])
 
 let phaserSuite = suite("Phaser", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Phaser.make
-    let _ = ToneJs_Phaser.makeWithOptions
-    let _ = ToneJs_Phaser.frequency
-    let _ = ToneJs_Phaser.octaves
-    let _ = ToneJs_Phaser.setOctaves
-    let _ = ToneJs_Phaser.q
-    let _ = ToneJs_Phaser.baseFrequency
-    let _ = ToneJs_Phaser.setBaseFrequency
-    let _ = ToneJs_Phaser.wet
-    let _ = ToneJs_Phaser.dispose
-    let _ = ToneJs_Phaser.asAudioNode
+    let _ = Phaser.make
+    let _ = Phaser.makeWithOptions
+    let _ = Phaser.frequency
+    let _ = Phaser.octaves
+    let _ = Phaser.setOctaves
+    let _ = Phaser.q
+    let _ = Phaser.baseFrequency
+    let _ = Phaser.setBaseFrequency
+    let _ = Phaser.wet
+    let _ = Phaser.dispose
+    let _ = Phaser.asAudioNode
     Pass
   }),
 ])
 
 let pingPongDelaySuite = suite("PingPongDelay", [
   test("bindings type-check", () => {
-    let _ = ToneJs_PingPongDelay.make
-    let _ = ToneJs_PingPongDelay.makeWithTime
-    let _ = ToneJs_PingPongDelay.makeWithTimeFeedback
-    let _ = ToneJs_PingPongDelay.makeWithOptions
-    let _ = ToneJs_PingPongDelay.delayTime
-    let _ = ToneJs_PingPongDelay.feedback
-    let _ = ToneJs_PingPongDelay.wet
-    let _ = ToneJs_PingPongDelay.dispose
-    let _ = ToneJs_PingPongDelay.asAudioNode
+    let _ = PingPongDelay.make
+    let _ = PingPongDelay.makeWithTime
+    let _ = PingPongDelay.makeWithTimeFeedback
+    let _ = PingPongDelay.makeWithOptions
+    let _ = PingPongDelay.delayTime
+    let _ = PingPongDelay.feedback
+    let _ = PingPongDelay.wet
+    let _ = PingPongDelay.dispose
+    let _ = PingPongDelay.asAudioNode
     Pass
   }),
 ])
 
 let pitchShiftSuite = suite("PitchShift", [
   test("bindings type-check", () => {
-    let _ = ToneJs_PitchShift.make
-    let _ = ToneJs_PitchShift.makeWithOptions
-    let _ = ToneJs_PitchShift.pitch
-    let _ = ToneJs_PitchShift.setPitch
-    let _ = ToneJs_PitchShift.windowSize
-    let _ = ToneJs_PitchShift.setWindowSize
-    let _ = ToneJs_PitchShift.delayTime
-    let _ = ToneJs_PitchShift.feedback
-    let _ = ToneJs_PitchShift.wet
-    let _ = ToneJs_PitchShift.dispose
-    let _ = ToneJs_PitchShift.asAudioNode
+    let _ = PitchShift.make
+    let _ = PitchShift.makeWithOptions
+    let _ = PitchShift.pitch
+    let _ = PitchShift.setPitch
+    let _ = PitchShift.windowSize
+    let _ = PitchShift.setWindowSize
+    let _ = PitchShift.delayTime
+    let _ = PitchShift.feedback
+    let _ = PitchShift.wet
+    let _ = PitchShift.dispose
+    let _ = PitchShift.asAudioNode
     Pass
   }),
 ])
 
 let tremoloSuite = suite("Tremolo", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Tremolo.make
-    let _ = ToneJs_Tremolo.makeWithOptions
-    let _ = ToneJs_Tremolo.frequency
-    let _ = ToneJs_Tremolo.depth
-    let _ = ToneJs_Tremolo.getType
-    let _ = ToneJs_Tremolo.setType
-    let _ = ToneJs_Tremolo.spread
-    let _ = ToneJs_Tremolo.setSpread
-    let _ = ToneJs_Tremolo.wet
-    let _ = ToneJs_Tremolo.start
-    let _ = ToneJs_Tremolo.stop
-    let _ = ToneJs_Tremolo.dispose
-    let _ = ToneJs_Tremolo.asAudioNode
+    let _ = Tremolo.make
+    let _ = Tremolo.makeWithOptions
+    let _ = Tremolo.frequency
+    let _ = Tremolo.depth
+    let _ = Tremolo.getType
+    let _ = Tremolo.setType
+    let _ = Tremolo.spread
+    let _ = Tremolo.setSpread
+    let _ = Tremolo.wet
+    let _ = Tremolo.start
+    let _ = Tremolo.stop
+    let _ = Tremolo.dispose
+    let _ = Tremolo.asAudioNode
     Pass
   }),
 ])
 
 let vibratoSuite = suite("Vibrato", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Vibrato.make
-    let _ = ToneJs_Vibrato.makeWithOptions
-    let _ = ToneJs_Vibrato.frequency
-    let _ = ToneJs_Vibrato.depth
-    let _ = ToneJs_Vibrato.getType
-    let _ = ToneJs_Vibrato.setType
-    let _ = ToneJs_Vibrato.wet
-    let _ = ToneJs_Vibrato.dispose
-    let _ = ToneJs_Vibrato.asAudioNode
+    let _ = Vibrato.make
+    let _ = Vibrato.makeWithOptions
+    let _ = Vibrato.frequency
+    let _ = Vibrato.depth
+    let _ = Vibrato.getType
+    let _ = Vibrato.setType
+    let _ = Vibrato.wet
+    let _ = Vibrato.dispose
+    let _ = Vibrato.asAudioNode
     Pass
   }),
 ])
 
 let frequencyShifterSuite = suite("FrequencyShifter", [
   test("bindings type-check", () => {
-    let _ = ToneJs_FrequencyShifter.make
-    let _ = ToneJs_FrequencyShifter.makeWithOptions
-    let _ = ToneJs_FrequencyShifter.frequency
-    let _ = ToneJs_FrequencyShifter.wet
-    let _ = ToneJs_FrequencyShifter.dispose
-    let _ = ToneJs_FrequencyShifter.asAudioNode
+    let _ = FrequencyShifter.make
+    let _ = FrequencyShifter.makeWithOptions
+    let _ = FrequencyShifter.frequency
+    let _ = FrequencyShifter.wet
+    let _ = FrequencyShifter.dispose
+    let _ = FrequencyShifter.asAudioNode
     Pass
   }),
 ])
 
 let stereoWidenerSuite = suite("StereoWidener", [
   test("bindings type-check", () => {
-    let _ = ToneJs_StereoWidener.make
-    let _ = ToneJs_StereoWidener.makeWithOptions
-    let _ = ToneJs_StereoWidener.width
-    let _ = ToneJs_StereoWidener.wet
-    let _ = ToneJs_StereoWidener.dispose
-    let _ = ToneJs_StereoWidener.asAudioNode
+    let _ = StereoWidener.make
+    let _ = StereoWidener.makeWithOptions
+    let _ = StereoWidener.width
+    let _ = StereoWidener.wet
+    let _ = StereoWidener.dispose
+    let _ = StereoWidener.asAudioNode
     Pass
   }),
 ])
 
 let compressorSuite = suite("Compressor", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Compressor.make
-    let _ = ToneJs_Compressor.makeWithThreshold
-    let _ = ToneJs_Compressor.makeWithThresholdRatio
-    let _ = ToneJs_Compressor.makeWithOptions
-    let _ = ToneJs_Compressor.threshold
-    let _ = ToneJs_Compressor.ratio
-    let _ = ToneJs_Compressor.attack
-    let _ = ToneJs_Compressor.release
-    let _ = ToneJs_Compressor.knee
-    let _ = ToneJs_Compressor.reduction
-    let _ = ToneJs_Compressor.dispose
-    let _ = ToneJs_Compressor.asAudioNode
+    let _ = Compressor.make
+    let _ = Compressor.makeWithThreshold
+    let _ = Compressor.makeWithThresholdRatio
+    let _ = Compressor.makeWithOptions
+    let _ = Compressor.threshold
+    let _ = Compressor.ratio
+    let _ = Compressor.attack
+    let _ = Compressor.release
+    let _ = Compressor.knee
+    let _ = Compressor.reduction
+    let _ = Compressor.dispose
+    let _ = Compressor.asAudioNode
     Pass
   }),
 ])
 
 let limiterSuite = suite("Limiter", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Limiter.make
-    let _ = ToneJs_Limiter.makeWithThreshold
-    let _ = ToneJs_Limiter.makeWithOptions
-    let _ = ToneJs_Limiter.threshold
-    let _ = ToneJs_Limiter.reduction
-    let _ = ToneJs_Limiter.dispose
-    let _ = ToneJs_Limiter.asAudioNode
+    let _ = Limiter.make
+    let _ = Limiter.makeWithThreshold
+    let _ = Limiter.makeWithOptions
+    let _ = Limiter.threshold
+    let _ = Limiter.reduction
+    let _ = Limiter.dispose
+    let _ = Limiter.asAudioNode
     Pass
   }),
 ])
 
 let gateSuite = suite("Gate", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Gate.make
-    let _ = ToneJs_Gate.makeWithThreshold
-    let _ = ToneJs_Gate.makeWithOptions
-    let _ = ToneJs_Gate.threshold
-    let _ = ToneJs_Gate.smoothing
-    let _ = ToneJs_Gate.setSmoothing
-    let _ = ToneJs_Gate.dispose
-    let _ = ToneJs_Gate.asAudioNode
+    let _ = Gate.make
+    let _ = Gate.makeWithThreshold
+    let _ = Gate.makeWithOptions
+    let _ = Gate.threshold
+    let _ = Gate.smoothing
+    let _ = Gate.setSmoothing
+    let _ = Gate.dispose
+    let _ = Gate.asAudioNode
     Pass
   }),
 ])
 
 let filterSuite = suite("Filter", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Filter.make
-    let _ = ToneJs_Filter.makeWithFreq
-    let _ = ToneJs_Filter.makeWithOptions
-    let _ = ToneJs_Filter.frequency
-    let _ = ToneJs_Filter.q
-    let _ = ToneJs_Filter.gain
-    let _ = ToneJs_Filter.detune
-    let _ = ToneJs_Filter.getType
-    let _ = ToneJs_Filter.setType
-    let _ = ToneJs_Filter.rolloff
-    let _ = ToneJs_Filter.setRolloff
-    let _ = ToneJs_Filter.getFrequencyResponse
-    let _ = ToneJs_Filter.dispose
-    let _ = ToneJs_Filter.asAudioNode
+    let _ = Filter.make
+    let _ = Filter.makeWithFreq
+    let _ = Filter.makeWithOptions
+    let _ = Filter.frequency
+    let _ = Filter.q
+    let _ = Filter.gain
+    let _ = Filter.detune
+    let _ = Filter.getType
+    let _ = Filter.setType
+    let _ = Filter.rolloff
+    let _ = Filter.setRolloff
+    let _ = Filter.getFrequencyResponse
+    let _ = Filter.dispose
+    let _ = Filter.asAudioNode
     Pass
   }),
 ])
 
 let eq3Suite = suite("EQ3", [
   test("bindings type-check", () => {
-    let _ = ToneJs_EQ3.make
-    let _ = ToneJs_EQ3.makeWithOptions
-    let _ = ToneJs_EQ3.low
-    let _ = ToneJs_EQ3.mid
-    let _ = ToneJs_EQ3.high
-    let _ = ToneJs_EQ3.lowFrequency
-    let _ = ToneJs_EQ3.highFrequency
-    let _ = ToneJs_EQ3.dispose
-    let _ = ToneJs_EQ3.asAudioNode
+    let _ = EQ3.make
+    let _ = EQ3.makeWithOptions
+    let _ = EQ3.low
+    let _ = EQ3.mid
+    let _ = EQ3.high
+    let _ = EQ3.lowFrequency
+    let _ = EQ3.highFrequency
+    let _ = EQ3.dispose
+    let _ = EQ3.asAudioNode
     Pass
   }),
 ])
 
 let pannerSuite = suite("Panner", [
   test("bindings type-check", () => {
-    let _ = ToneJs_Panner.make
-    let _ = ToneJs_Panner.makeWithPan
-    let _ = ToneJs_Panner.makeWithOptions
-    let _ = ToneJs_Panner.pan
-    let _ = ToneJs_Panner.dispose
-    let _ = ToneJs_Panner.asAudioNode
+    let _ = Panner.make
+    let _ = Panner.makeWithPan
+    let _ = Panner.makeWithOptions
+    let _ = Panner.pan
+    let _ = Panner.dispose
+    let _ = Panner.asAudioNode
     Pass
   }),
 ])
