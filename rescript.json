@@ -1,0 +1,16 @@
+{
+  "name": "rescript-tonejs",
+  "sources": [
+    { "dir": "src", "subdirs": true },
+    { "dir": "tests", "subdirs": true, "type": "dev" }
+  ],
+  "package-specs": [
+    {
+      "module": "esmodule",
+      "in-source": true
+    }
+  ],
+  "suffix": ".res.js",
+  "dev-dependencies": ["zekr"],
+  "namespace": true
+}

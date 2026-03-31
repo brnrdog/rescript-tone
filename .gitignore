@@ -1,0 +1,7 @@
+node_modules/
+lib/
+.bsb.lock
+*.res.js
+.vite/
+dist/
+.merlin
