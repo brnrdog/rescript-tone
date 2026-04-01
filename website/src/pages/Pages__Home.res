@@ -1,7 +1,6 @@
 open Xote
 
 // ---- JS bindings ----
-@val external navigator: {..} = "navigator"
 @val external setTimeout: (unit => unit, int) => unit = "setTimeout"
 
 let toFreq: string => 'a = Obj.magic
@@ -61,275 +60,151 @@ module Hero = {
             (),
           )}
         </div>
-        <div class="hero-install">
-          <code> {Component.text("npm install rescript-tone tone")} </code>
-        </div>
       </div>
     </section>
   }
 }
 
-// ---- Mini Synth Demo ----
-module MiniSynth = {
+// ---- Sound Grid ----
+// An Ableton-inspired beat grid. Each row is a different Tone.js
+// instrument; each column is a step in time. Toggle cells to build
+// a pattern — all rows play together through a shared Transport.
+
+module SoundGrid = {
   type props = {}
 
-  let notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]
-  let labels = ["C", "D", "E", "F", "G", "A", "B", "C"]
+  // Pentatonic notes per column so random toggling always sounds musical
+  let melodyNotes = ["C4", "D4", "E4", "G4", "A4", "G4", "E4", "D4"]
+  let bassNotes = ["C2", "C2", "E2", "E2", "G2", "G2", "C3", "C2"]
+  let numSteps = 8
 
-  let make = (_props: props) => {
-    let isReady = Signal.make(false)
-    let activeNote = Signal.make("")
-    let synthRef: ref<option<Tone.Synth.t>> = ref(None)
-
-    let initAudio = _ => {
-      let _ = Tone.Core.start()
-      let synth = Tone.Synth.makeWithOptions({
-        oscillator: {\"type": Triangle},
-        envelope: makeEnvelope(~attack=0.01, ~decay=0.2, ~sustain=0.3, ~release=0.8),
-      })
-      synth->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
-      synthRef := Some(synth)
-      Signal.set(isReady, true)
-    }
-
-    let playNote = (note: string) => _ => {
-      switch synthRef.contents {
-      | Some(synth) => {
-          synth->Tone.Synth.triggerAttackRelease(toFreq(note), toTime("8n"))->ignore
-          Signal.set(activeNote, note)
-          setTimeout(() => Signal.set(activeNote, ""), 200)
-        }
-      | None => ()
-      }
-    }
-
-    <div class="mini-demo">
-      <div class="mini-demo-label"> {Component.text("Synth")} </div>
-      <div class="mini-demo-body">
-        {Component.signalFragment(
-          Computed.make(() => {
-            if Signal.get(isReady) {
-              [
-                <div class="mini-piano">
-                  {Component.fragment(
-                    notes->Array.mapWithIndex((note, i) => {
-                      Component.element(
-                        "button",
-                        ~attrs=[
-                          Component.computedAttr("class", () =>
-                            "mini-key" ++ (Signal.get(activeNote) == note ? " active" : "")
-                          ),
-                        ],
-                        ~events=[("click", playNote(note))],
-                        ~children=[
-                          Component.text(
-                            switch labels->Array.get(i) {
-                            | Some(l) => l
-                            | None => ""
-                            },
-                          ),
-                        ],
-                        (),
-                      )
-                    }),
-                  )}
-                </div>,
-              ]
-            } else {
-              [
-                Component.element(
-                  "button",
-                  ~attrs=[Component.attr("class", "mini-start-btn")],
-                  ~events=[("click", initAudio)],
-                  ~children=[
-                    Basefn.Icon.make({name: ChevronRight, size: Sm}),
-                    Component.text(" Play"),
-                  ],
-                  (),
-                ),
-              ]
-            }
-          }),
-        )}
-      </div>
-      <div class="mini-demo-code">
-        <code>
-          {Component.text(`Synth.triggerAttackRelease("C4", "8n")`)}
-        </code>
-      </div>
-    </div>
+  // Row metadata
+  type row = {
+    label: string,
+    code: string,
+    color: string,
   }
-}
 
-// ---- Mini Effects Demo ----
-module MiniEffects = {
-  type props = {}
-
-  let make = (_props: props) => {
-    let isReady = Signal.make(false)
-    let reverbWet = Signal.make(50)
-    let activeNote = Signal.make("")
-
-    let synthRef: ref<option<Tone.FMSynth.t>> = ref(None)
-    let reverbRef: ref<option<Tone.Reverb.t>> = ref(None)
-
-    let initAudio = _ => {
-      let _ = Tone.Core.start()
-      let synth = Tone.FMSynth.make()
-      let reverb = Tone.Reverb.makeWithOptions({decay: 3.0, wet: 0.5})
-      synth->Tone.FMSynth.asAudioNode
-      ->Tone.AudioNode.connect(reverb->Tone.Reverb.asAudioNode)
-      ->ignore
-      reverb->Tone.Reverb.asAudioNode->Tone.AudioNode.toDestination->ignore
-      synthRef := Some(synth)
-      reverbRef := Some(reverb)
-      Signal.set(isReady, true)
-    }
-
-    let playNote = (note: string) => _ => {
-      switch synthRef.contents {
-      | Some(synth) => {
-          synth->Tone.FMSynth.triggerAttackRelease(toFreq(note), toTime("4n"))->ignore
-          Signal.set(activeNote, note)
-          setTimeout(() => Signal.set(activeNote, ""), 300)
-        }
-      | None => ()
-      }
-    }
-
-    let notes = ["C3", "E3", "G3", "C4"]
-
-    <div class="mini-demo">
-      <div class="mini-demo-label"> {Component.text("Effects")} </div>
-      <div class="mini-demo-body">
-        {Component.signalFragment(
-          Computed.make(() => {
-            if Signal.get(isReady) {
-              [
-                <div class="mini-controls">
-                  <span class="mini-slider-label">
-                    {Component.textSignal(() =>
-                      "Reverb " ++ Int.toString(Signal.get(reverbWet)) ++ "%"
-                    )}
-                  </span>
-                  {Component.element(
-                    "input",
-                    ~attrs=[
-                      Component.attr("type", "range"),
-                      Component.attr("min", "0"),
-                      Component.attr("max", "100"),
-                      Component.computedAttr("value", () =>
-                        Int.toString(Signal.get(reverbWet))
-                      ),
-                      Component.attr("class", "mini-slider"),
-                    ],
-                    ~events=[
-                      ("input", evt => {
-                        let val: string = Obj.magic(evt)["target"]["value"]
-                        let intVal = Int.fromString(val)->Option.getOr(50)
-                        Signal.set(reverbWet, intVal)
-                        switch reverbRef.contents {
-                        | Some(reverb) =>
-                          Tone.Reverb.wet(reverb)->Tone.Param.setValue(
-                            Int.toFloat(intVal) /. 100.0,
-                          )
-                        | None => ()
-                        }
-                      }),
-                    ],
-                    (),
-                  )}
-                </div>,
-                <div class="mini-note-row">
-                  {Component.fragment(
-                    notes->Array.map(note => {
-                      Component.element(
-                        "button",
-                        ~attrs=[
-                          Component.computedAttr("class", () =>
-                            "mini-note" ++ (Signal.get(activeNote) == note ? " active" : "")
-                          ),
-                        ],
-                        ~events=[("click", playNote(note))],
-                        ~children=[Component.text(note)],
-                        (),
-                      )
-                    }),
-                  )}
-                </div>,
-              ]
-            } else {
-              [
-                Component.element(
-                  "button",
-                  ~attrs=[Component.attr("class", "mini-start-btn")],
-                  ~events=[("click", initAudio)],
-                  ~children=[
-                    Basefn.Icon.make({name: ChevronRight, size: Sm}),
-                    Component.text(" Play"),
-                  ],
-                  (),
-                ),
-              ]
-            }
-          }),
-        )}
-      </div>
-      <div class="mini-demo-code">
-        <code>
-          {Component.text(`FMSynth -> Reverb -> Destination`)}
-        </code>
-      </div>
-    </div>
-  }
-}
-
-// ---- Mini Sequencer Demo ----
-module MiniSequencer = {
-  type props = {}
+  let rows: array<row> = [
+    {
+      label: "Lead",
+      code: `Synth.triggerAttackRelease("C4", "8n")`,
+      color: "pink",
+    },
+    {
+      label: "Bass",
+      code: `FMSynth -> Reverb -> Destination`,
+      color: "green",
+    },
+    {
+      label: "Beat",
+      code: `Loop.make(callback, "8n")`,
+      color: "purple",
+    },
+  ]
 
   let make = (_props: props) => {
     let isReady = Signal.make(false)
     let isPlaying = Signal.make(false)
     let currentStep = Signal.make(-1)
+    let bpm = Signal.make(110)
 
-    let steps = [true, false, true, false, true, true, false, true]
-    let stepSignals = steps->Array.map(v => Signal.make(v))
-    let stepNotes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]
+    // 3 rows × 8 steps; preset a musical default pattern
+    let grid =
+      rows->Array.mapWithIndex((_, rowIdx) => {
+        Array.fromInitializer(~length=numSteps, i => {
+          let default = switch rowIdx {
+          // Lead: beats 1, 3, 5, 7 (offbeats)
+          | 0 => mod(i, 2) == 0
+          // Bass: beats 1, 5
+          | 1 => i == 0 || i == 4
+          // Beat: every other
+          | 2 => mod(i, 2) == 1
+          | _ => false
+          }
+          Signal.make(default)
+        })
+      })
 
-    let synthRef: ref<option<Tone.Synth.t>> = ref(None)
+    let leadRef: ref<option<Tone.Synth.t>> = ref(None)
+    let bassRef: ref<option<Tone.FMSynth.t>> = ref(None)
+    let beatRef: ref<option<Tone.Synth.t>> = ref(None)
+    let reverbRef: ref<option<Tone.Reverb.t>> = ref(None)
     let loopRef: ref<option<Tone.Loop.t>> = ref(None)
 
     let initAudio = _ => {
       let _ = Tone.Core.start()
-      let synth = Tone.Synth.makeWithOptions({
-        oscillator: {\"type": Square},
-        envelope: makeEnvelope(~attack=0.01, ~decay=0.1, ~sustain=0.1, ~release=0.3),
+
+      // Lead: bright triangle synth
+      let lead = Tone.Synth.makeWithOptions({
+        oscillator: {\"type": Triangle},
+        envelope: makeEnvelope(~attack=0.02, ~decay=0.15, ~sustain=0.2, ~release=0.4),
+        volume: -8.0,
       })
-      synth->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
+      lead->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
+
+      // Bass: warm FM synth through reverb
+      let reverb = Tone.Reverb.makeWithOptions({decay: 2.0, wet: 0.3})
+      let bass = Tone.FMSynth.makeWithOptions({
+        volume: -6.0,
+      })
+      bass->Tone.FMSynth.asAudioNode
+      ->Tone.AudioNode.connect(reverb->Tone.Reverb.asAudioNode)
+      ->ignore
+      reverb->Tone.Reverb.asAudioNode->Tone.AudioNode.toDestination->ignore
+
+      // Beat: short percussive square burst
+      let beat = Tone.Synth.makeWithOptions({
+        oscillator: {\"type": Square},
+        envelope: makeEnvelope(~attack=0.001, ~decay=0.08, ~sustain=0.0, ~release=0.05),
+        volume: -10.0,
+      })
+      beat->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
+
+      let transport = Tone.Core.getTransport()
+      Tone.Transport.bpm(transport)->Tone.Param.setValue(110.0)
 
       let stepIdx = ref(0)
       let loop = Tone.Loop.make(_time => {
-        let idx = mod(stepIdx.contents, 8)
-        Signal.set(currentStep, idx)
-        let isActive = switch stepSignals->Array.get(idx) {
-        | Some(s) => Signal.get(s)
-        | None => false
+        let col = mod(stepIdx.contents, numSteps)
+        Signal.set(currentStep, col)
+
+        // Lead
+        let leadRow = grid->Array.getUnsafe(0)
+        let leadOn = Signal.get(leadRow->Array.getUnsafe(col))
+        if leadOn {
+          let note = melodyNotes->Array.getUnsafe(col)
+          lead->Tone.Synth.triggerAttackRelease(toFreq(note), toTime("16n"))->ignore
         }
-        if isActive {
-          let note = switch stepNotes->Array.get(idx) {
-          | Some(n) => n
-          | None => "C4"
-          }
-          synth->Tone.Synth.triggerAttackRelease(toFreq(note), toTime("16n"))->ignore
+
+        // Bass
+        let bassRow = grid->Array.getUnsafe(1)
+        let bassOn = Signal.get(bassRow->Array.getUnsafe(col))
+        if bassOn {
+          let note = bassNotes->Array.getUnsafe(col)
+          bass->Tone.FMSynth.triggerAttackRelease(toFreq(note), toTime("8n"))->ignore
         }
+
+        // Beat
+        let beatRow = grid->Array.getUnsafe(2)
+        let beatOn = Signal.get(beatRow->Array.getUnsafe(col))
+        if beatOn {
+          beat->Tone.Synth.triggerAttackRelease(toFreq("G5"), toTime("32n"))->ignore
+        }
+
         stepIdx := stepIdx.contents + 1
       }, toTime("8n"))
 
-      synthRef := Some(synth)
+      leadRef := Some(lead)
+      bassRef := Some(bass)
+      beatRef := Some(beat)
+      reverbRef := Some(reverb)
       loopRef := Some(loop)
       Signal.set(isReady, true)
     }
+
+    // Suppress unused var warnings
+    let _ = (leadRef, bassRef, beatRef, reverbRef)
 
     let togglePlay = _ => {
       if Signal.get(isPlaying) {
@@ -350,19 +225,33 @@ module MiniSequencer = {
       }
     }
 
-    <div class="mini-demo">
-      <div class="mini-demo-label"> {Component.text("Sequencer")} </div>
-      <div class="mini-demo-body">
+    let changeBpm = evt => {
+      let val: string = Obj.magic(evt)["target"]["value"]
+      let intVal = Int.fromString(val)->Option.getOr(110)
+      Signal.set(bpm, intVal)
+      Tone.Transport.bpm(Tone.Core.getTransport())->Tone.Param.setValue(Int.toFloat(intVal))
+    }
+
+    <section class="grid-section">
+      <div class="grid-container">
+        <div class="grid-header">
+          <h2 class="grid-title"> {Component.text("Make some noise")} </h2>
+          <p class="grid-subtitle">
+            {Component.text("Toggle cells to build a pattern. Each row is a different Tone.js instrument — they all play together.")}
+          </p>
+        </div>
+
         {Component.signalFragment(
           Computed.make(() => {
             if Signal.get(isReady) {
               [
-                <div class="mini-seq-row">
+                // Transport controls
+                <div class="grid-controls">
                   {Component.element(
                     "button",
                     ~attrs=[
                       Component.computedAttr("class", () =>
-                        "mini-play-btn" ++ (Signal.get(isPlaying) ? " playing" : "")
+                        "grid-play-btn" ++ (Signal.get(isPlaying) ? " playing" : "")
                       ),
                     ],
                     ~events=[("click", togglePlay)],
@@ -373,75 +262,113 @@ module MiniSequencer = {
                     ],
                     (),
                   )}
-                  <div class="mini-steps">
+                  <div class="grid-bpm">
+                    <span class="grid-bpm-label">
+                      {Component.textSignal(() =>
+                        Int.toString(Signal.get(bpm)) ++ " bpm"
+                      )}
+                    </span>
+                    {Component.element(
+                      "input",
+                      ~attrs=[
+                        Component.attr("type", "range"),
+                        Component.attr("min", "60"),
+                        Component.attr("max", "180"),
+                        Component.computedAttr("value", () => Int.toString(Signal.get(bpm))),
+                        Component.attr("class", "grid-bpm-slider"),
+                      ],
+                      ~events=[("input", changeBpm)],
+                      (),
+                    )}
+                  </div>
+                </div>,
+
+                // The grid
+                <div class="sg">
+                  // Step numbers header
+                  <div class="sg-header">
+                    <div class="sg-label-spacer" />
                     {Component.fragment(
-                      stepSignals->Array.mapWithIndex((stepSig, i) => {
+                      Array.fromInitializer(~length=numSteps, i => {
                         Component.element(
-                          "button",
+                          "div",
                           ~attrs=[
-                            Component.computedAttr("class", () => {
-                              let active = Signal.get(stepSig)
-                              let isCurrent = Signal.get(currentStep) == i
-                              "mini-step" ++
-                              (active ? " on" : "") ++
-                              (isCurrent ? " current" : "")
-                            }),
+                            Component.computedAttr("class", () =>
+                              "sg-col-num" ++ (Signal.get(currentStep) == i ? " active" : "")
+                            ),
                           ],
-                          ~events=[("click", _ => Signal.update(stepSig, v => !v))],
+                          ~children=[Component.text(Int.toString(i + 1))],
                           (),
                         )
                       }),
                     )}
                   </div>
+
+                  // Instrument rows
+                  {Component.fragment(
+                    rows->Array.mapWithIndex((row, rowIdx) => {
+                      let rowSignals = grid->Array.getUnsafe(rowIdx)
+                      <div class={"sg-row sg-row-" ++ row.color}>
+                        <div class="sg-label">
+                          <span class="sg-label-name"> {Component.text(row.label)} </span>
+                          <code class="sg-label-code"> {Component.text(row.code)} </code>
+                        </div>
+                        {Component.fragment(
+                          rowSignals->Array.mapWithIndex((cellSig, colIdx) => {
+                            Component.element(
+                              "button",
+                              ~attrs=[
+                                Component.computedAttr("class", () => {
+                                  let on = Signal.get(cellSig)
+                                  let isCurrent = Signal.get(currentStep) == colIdx
+                                  "sg-cell" ++
+                                  (on ? " on" : "") ++
+                                  (isCurrent && on ? " pulse" : "") ++
+                                  (isCurrent ? " current" : "")
+                                }),
+                              ],
+                              ~events=[("click", _ => Signal.update(cellSig, v => !v))],
+                              (),
+                            )
+                          }),
+                        )}
+                      </div>
+                    }),
+                  )}
                 </div>,
               ]
             } else {
               [
-                Component.element(
-                  "button",
-                  ~attrs=[Component.attr("class", "mini-start-btn")],
-                  ~events=[("click", initAudio)],
-                  ~children=[
-                    Basefn.Icon.make({name: ChevronRight, size: Sm}),
-                    Component.text(" Play"),
-                  ],
-                  (),
-                ),
+                <div class="grid-start">
+                  {Component.element(
+                    "button",
+                    ~attrs=[Component.attr("class", "grid-start-btn")],
+                    ~events=[("click", initAudio)],
+                    ~children=[
+                      Component.text("Start Audio"),
+                    ],
+                    (),
+                  )}
+                  <span class="grid-start-hint">
+                    {Component.text("Click to enable Web Audio, then toggle cells to create a pattern.")}
+                  </span>
+                </div>,
               ]
             }
           }),
         )}
-      </div>
-      <div class="mini-demo-code">
-        <code>
-          {Component.text(`Loop.make(fn, "8n") -> Transport.start()`)}
-        </code>
-      </div>
-    </div>
-  }
-}
 
-// ---- Demos Grid ----
-module DemosGrid = {
-  type props = {}
-
-  let make = (_props: props) => {
-    <section class="demos-section">
-      <div class="demos-grid">
-        <MiniSynth />
-        <MiniEffects />
-        <MiniSequencer />
-      </div>
-      <div class="demos-cta">
-        {Router.link(
-          ~to="/examples",
-          ~attrs=[Component.attr("class", "demos-more-link")],
-          ~children=[
-            Component.text("See all examples "),
-            Basefn.Icon.make({name: ChevronRight, size: Sm}),
-          ],
-          (),
-        )}
+        <div class="grid-footer">
+          {Router.link(
+            ~to="/examples",
+            ~attrs=[Component.attr("class", "grid-more-link")],
+            ~children=[
+              Component.text("Explore more examples "),
+              Basefn.Icon.make({name: ChevronRight, size: Sm}),
+            ],
+            (),
+          )}
+        </div>
       </div>
     </section>
   }
@@ -536,7 +463,7 @@ type props = {}
 let make = (_props: props) => {
   <>
     <Hero />
-    <DemosGrid />
+    <SoundGrid />
     <Features />
     <CTA />
   </>
