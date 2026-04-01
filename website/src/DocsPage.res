@@ -222,17 +222,17 @@ module TableOfContents = {
         {Component.signalFragment(
           Computed.make(() => {
             let items = Signal.get(entries)
-            let active = Signal.get(activeId)
             items->Array.map(entry => {
-              let className =
+              let baseClass =
                 "toc-link" ++
-                (entry.level == 3 ? " toc-link-sub" : "") ++
-                (active == entry.id ? " active" : "")
+                (entry.level == 3 ? " toc-link-sub" : "")
               Component.element(
                 "a",
                 ~attrs=[
                   Component.attr("href", "#" ++ entry.id),
-                  Component.attr("class", className),
+                  Component.computedAttr("class", () =>
+                    baseClass ++ (Signal.get(activeId) == entry.id ? " active" : "")
+                  ),
                 ],
                 ~children=[Component.text(entry.text)],
                 (),
