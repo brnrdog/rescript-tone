@@ -29,6 +29,19 @@
   --green-900: #074f3a;
   --green-950: #042e22;
 
+  /* Purple (accents) */
+  --purple-50: #faf5ff;
+  --purple-100: #f3e8ff;
+  --purple-200: #e9d5ff;
+  --purple-300: #d8b4fe;
+  --purple-400: #c084fc;
+  --purple-500: #a855f7;
+  --purple-600: #9333ea;
+  --purple-700: #7e22ce;
+  --purple-800: #6b21a8;
+  --purple-900: #581c87;
+  --purple-950: #3b0764;
+
   /* Layout */
   --max-width: 1400px;
   --sidebar-width: 260px;
@@ -527,218 +540,279 @@ a:hover {
    Demos Grid (homepage)
    ======================================== */
 
-.demos-section {
+/* ---- Sound Grid (Ableton-inspired) ---- */
+.grid-section {
   padding: var(--space-10) var(--space-6) var(--space-6);
-  max-width: 960px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
-.demos-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-}
-
-.mini-demo {
+.grid-container {
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
-.mini-demo-label {
-  padding: var(--space-2) var(--space-4);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.grid-header {
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.grid-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2);
+}
+
+.grid-subtitle {
+  font-size: 14px;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--border-primary);
+  margin: 0;
+  line-height: 1.5;
 }
 
-.mini-demo-body {
-  padding: var(--space-4);
-  flex: 1;
+/* Transport controls */
+.grid-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 100px;
+  gap: var(--space-4);
+  padding: 0 var(--space-6) var(--space-4);
 }
 
-.mini-demo-code {
-  padding: var(--space-2) var(--space-4);
-  border-top: 1px solid var(--border-primary);
-  background: var(--bg-primary);
-}
-
-.mini-demo-code code {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.mini-start-btn {
+.grid-play-btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
+  justify-content: center;
+  width: 56px;
+  height: 36px;
+  background: var(--pink-500);
+  border: none;
   border-radius: var(--radius-md);
-  color: var(--text-secondary);
+  color: white;
   font-size: 13px;
+  font-weight: 600;
   font-family: var(--font-body);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
 }
 
-.mini-start-btn:hover {
-  border-color: var(--pink-400);
-  color: var(--text-primary);
+.grid-play-btn:hover {
+  background: var(--pink-400);
 }
 
-/* Mini piano keys */
-.mini-piano {
+.grid-play-btn.playing {
+  background: #ef4444;
+}
+
+.grid-play-btn.playing:hover {
+  background: #dc2626;
+}
+
+.grid-bpm {
   display: flex;
-  gap: 3px;
-  width: 100%;
-}
-
-.mini-key {
+  align-items: center;
+  gap: var(--space-3);
   flex: 1;
-  height: 48px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--radius-sm);
-  color: var(--text-muted);
-  font-size: 11px;
+}
+
+.grid-bpm-label {
+  font-size: 12px;
   font-family: var(--font-mono);
-  cursor: pointer;
-  transition: all 0.1s ease;
-}
-
-.mini-key:hover {
-  border-color: var(--pink-400);
-  color: var(--text-primary);
-}
-
-.mini-key.active {
-  background: var(--pink-500);
-  border-color: var(--pink-400);
-  color: white;
-}
-
-/* Mini effects controls */
-.mini-controls {
-  width: 100%;
-  margin-bottom: var(--space-3);
-}
-
-.mini-slider-label {
-  display: block;
-  font-size: 11px;
   color: var(--text-muted);
-  margin-bottom: var(--space-1);
-  font-family: var(--font-mono);
+  white-space: nowrap;
+  min-width: 60px;
 }
 
-.mini-slider {
-  width: 100%;
+.grid-bpm-slider {
+  flex: 1;
   height: 4px;
   accent-color: var(--pink-500);
 }
 
-.mini-note-row {
-  display: flex;
+/* The step grid */
+.sg {
+  padding: 0 var(--space-6) var(--space-4);
+}
+
+.sg-header {
+  display: grid;
+  grid-template-columns: 140px repeat(8, 1fr);
   gap: 4px;
-  width: 100%;
+  margin-bottom: 4px;
 }
 
-.mini-note {
-  flex: 1;
-  height: 36px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--radius-sm);
-  color: var(--text-muted);
-  font-size: 11px;
+.sg-label-spacer {
+  /* empty cell above the row labels */
+}
+
+.sg-col-num {
+  text-align: center;
+  font-size: 10px;
   font-family: var(--font-mono);
-  cursor: pointer;
-  transition: all 0.1s ease;
-}
-
-.mini-note:hover {
-  border-color: var(--green-400);
-}
-
-.mini-note.active {
-  background: var(--green-500);
-  border-color: var(--green-400);
-  color: white;
-}
-
-/* Mini sequencer */
-.mini-seq-row {
-  display: flex;
-  gap: var(--space-2);
-  width: 100%;
-  align-items: center;
-}
-
-.mini-play-btn {
-  padding: var(--space-1) var(--space-3);
-  background: var(--pink-500);
-  border: none;
+  color: var(--text-muted);
+  padding: var(--space-1) 0;
   border-radius: var(--radius-sm);
-  color: white;
-  font-size: 12px;
-  font-family: var(--font-body);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background var(--transition-fast);
+  transition: color 0.1s ease;
 }
 
-.mini-play-btn.playing {
-  background: #ef4444;
+.sg-col-num.active {
+  color: var(--pink-400);
+  font-weight: 700;
 }
 
-.mini-steps {
+/* Row */
+.sg-row {
+  display: grid;
+  grid-template-columns: 140px repeat(8, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.sg-label {
   display: flex;
-  gap: 3px;
-  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: var(--space-2);
+  overflow: hidden;
 }
 
-.mini-step {
-  flex: 1;
-  height: 28px;
+.sg-label-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.sg-label-code {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Cell */
+.sg-cell {
+  aspect-ratio: 1;
   background: var(--bg-tertiary);
   border: 1.5px solid var(--border-primary);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all 0.08s ease;
+  padding: 0;
+  min-height: 36px;
 }
 
-.mini-step.on {
+.sg-cell:hover {
+  border-color: var(--text-muted);
+}
+
+/* Row colors – pink (Lead) */
+.sg-row-pink .sg-cell.on {
   background: rgba(229, 53, 171, 0.2);
   border-color: var(--pink-500);
 }
 
-.mini-step.current {
-  box-shadow: 0 0 0 1.5px var(--green-400);
+.sg-row-pink .sg-cell.pulse {
+  background: var(--pink-500);
+  border-color: var(--pink-400);
+  box-shadow: 0 0 8px rgba(229, 53, 171, 0.5);
 }
 
-.mini-step.on.current {
-  background: rgba(229, 53, 171, 0.4);
+.sg-row-pink .sg-label-name {
+  color: var(--pink-400);
 }
 
-.demos-cta {
+/* Row colors – green (Bass) */
+.sg-row-green .sg-cell.on {
+  background: rgba(45, 212, 160, 0.2);
+  border-color: var(--green-500);
+}
+
+.sg-row-green .sg-cell.pulse {
+  background: var(--green-500);
+  border-color: var(--green-400);
+  box-shadow: 0 0 8px rgba(45, 212, 160, 0.5);
+}
+
+.sg-row-green .sg-label-name {
+  color: var(--green-400);
+}
+
+/* Row colors – purple (Beat) */
+.sg-row-purple .sg-cell.on {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--purple-500);
+}
+
+.sg-row-purple .sg-cell.pulse {
+  background: var(--purple-500);
+  border-color: var(--purple-400);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
+
+.sg-row-purple .sg-label-name {
+  color: var(--purple-400);
+}
+
+/* Current step indicator */
+.sg-cell.current {
+  box-shadow: inset 0 0 0 1.5px var(--text-muted);
+}
+
+.sg-cell.on.current {
+  /* pulse class handles the glow */
+}
+
+/* Start audio prompt */
+.grid-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+}
+
+.grid-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: var(--pink-500);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.grid-start-btn:hover {
+  background: var(--pink-400);
+}
+
+.grid-start-hint {
+  font-size: 13px;
+  color: var(--text-muted);
   text-align: center;
-  margin-top: var(--space-4);
 }
 
-.demos-more-link {
+/* Footer link */
+.grid-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-primary);
+  text-align: center;
+}
+
+.grid-more-link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -747,7 +821,7 @@ a:hover {
   transition: color var(--transition-fast);
 }
 
-.demos-more-link:hover {
+.grid-more-link:hover {
   color: var(--pink-400);
 }
 
@@ -1404,8 +1478,27 @@ a:hover {
     font-size: 16px;
   }
 
-  .demos-grid {
-    grid-template-columns: 1fr;
+  .sg-header,
+  .sg-row {
+    grid-template-columns: 100px repeat(8, 1fr);
+  }
+
+  .sg-label-code {
+    display: none;
+  }
+
+  .grid-section {
+    padding: var(--space-6) var(--space-3);
+  }
+
+  .sg {
+    padding: 0 var(--space-3) var(--space-4);
+  }
+
+  .grid-header,
+  .grid-controls {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
   }
 
   .docs-sidebar {
