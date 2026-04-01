@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "rescript -w & vite",
-    "build": "rescript && vite build && cp dist/index.html dist/404.html",
+    "build": "rescript && vite build && node --import ./scripts/node-loader-register.mjs scripts/prerender.mjs",
     "preview": "vite preview",
     "res:build": "rescript",
     "res:watch": "rescript -w",
