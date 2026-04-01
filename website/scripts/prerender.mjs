@@ -66,14 +66,25 @@ for (const route of routes) {
     `<div id="app">${html}</div>`
   );
 
-  // Write to the correct path
-  const outPath =
-    route === "/"
-      ? join(distDir, "index.html")
-      : join(distDir, route.slice(1), "index.html");
-
-  mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, page, "utf-8");
+  // Write to the correct paths.
+  // For GitHub Pages we need both forms so the URL works with AND without
+  // a trailing slash (without the slash GH Pages would 301-redirect to
+  // the directory, causing a flash):
+  //   dist/getting-started/index.html  →  /rescript-tone/getting-started/
+  //   dist/getting-started.html        →  /rescript-tone/getting-started
+  if (route === "/") {
+    writeFileSync(join(distDir, "index.html"), page, "utf-8");
+  } else {
+    const slug = route.slice(1); // e.g. "getting-started" or "api/core"
+    // directory form: dist/<slug>/index.html
+    const dirPath = join(distDir, slug, "index.html");
+    mkdirSync(dirname(dirPath), { recursive: true });
+    writeFileSync(dirPath, page, "utf-8");
+    // file form: dist/<slug>.html (handles no-trailing-slash)
+    const filePath = join(distDir, slug + ".html");
+    mkdirSync(dirname(filePath), { recursive: true });
+    writeFileSync(filePath, page, "utf-8");
+  }
   console.log(`  ✓ ${route}`);
 }
 
