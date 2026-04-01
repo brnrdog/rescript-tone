@@ -776,46 +776,35 @@ module DrumMachine = {
     }
 
     let kickRef: ref<option<Tone.Synth.t>> = ref(None)
-    let snareRef: ref<option<Tone.Noise.t>> = ref(None)
-    let hihatRef: ref<option<Tone.Noise.t>> = ref(None)
+    let snareRef: ref<option<Tone.Synth.t>> = ref(None)
+    let hihatRef: ref<option<Tone.Synth.t>> = ref(None)
     let loopRef: ref<option<Tone.Loop.t>> = ref(None)
 
     let initAudio = _ => {
       let _ = Tone.Core.start()
 
-      // Kick: low sine
+      // Kick: low sine with fast decay
       let kick = Tone.Synth.makeWithOptions({
         oscillator: {\"type": Sine},
         envelope: makeEnvelope(~attack=0.001, ~decay=0.2, ~sustain=0.0, ~release=0.2),
       })
       kick->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
 
-      // Snare: white noise burst
-      let snare = Tone.Noise.makeWithOptions({
-        \"type": White,
-        volume: -10.0,
+      // Snare: triangle burst at mid frequency for a snappy sound
+      let snare = Tone.Synth.makeWithOptions({
+        oscillator: {\"type": Triangle},
+        envelope: makeEnvelope(~attack=0.001, ~decay=0.12, ~sustain=0.0, ~release=0.1),
+        volume: -6.0,
       })
-      let snareEnv = Tone.Gain.make()
-      snare->Tone.Noise.asAudioNode
-      ->Tone.AudioNode.connect(snareEnv->Tone.Gain.asAudioNode)
-      ->ignore
-      snareEnv->Tone.Gain.asAudioNode->Tone.AudioNode.toDestination->ignore
-      snare->Tone.Noise.start->ignore
+      snare->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
 
-      // Hihat: filtered noise
-      let hihat = Tone.Noise.makeWithOptions({
-        \"type": White,
-        volume: -18.0,
+      // Hihat: square burst at high frequency for a metallic tick
+      let hihat = Tone.Synth.makeWithOptions({
+        oscillator: {\"type": Square},
+        envelope: makeEnvelope(~attack=0.001, ~decay=0.05, ~sustain=0.0, ~release=0.05),
+        volume: -12.0,
       })
-      let hihatFilter = Tone.Filter.makeWithOptions({
-        frequency: 8000.0,
-        \"type": Highpass,
-      })
-      hihat->Tone.Noise.asAudioNode
-      ->Tone.AudioNode.connect(hihatFilter->Tone.Filter.asAudioNode)
-      ->ignore
-      hihatFilter->Tone.Filter.asAudioNode->Tone.AudioNode.toDestination->ignore
-      hihat->Tone.Noise.start->ignore
+      hihat->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
 
       let transport = Tone.Core.getTransport()
       Tone.Transport.bpm(transport)->Tone.Param.setValue(120.0)
@@ -840,8 +829,7 @@ module DrumMachine = {
         | None => false
         }
         if snareOn {
-          Tone.Gain.gain(snareEnv)->Tone.Param.setValue(1.0)
-          Tone.Gain.gain(snareEnv)->Tone.Param.linearRampTo(0.0, toTime("32n"))->ignore
+          snare->Tone.Synth.triggerAttackRelease(toFreq("G3"), toTime("32n"))->ignore
         }
 
         // Hihat
@@ -850,7 +838,7 @@ module DrumMachine = {
         | None => false
         }
         if hihatOn {
-          hihat->Tone.Noise.restart->ignore
+          hihat->Tone.Synth.triggerAttackRelease(toFreq("C6"), toTime("32n"))->ignore
         }
 
         stepIdx := stepIdx.contents + 1
@@ -862,6 +850,9 @@ module DrumMachine = {
       loopRef := Some(loop)
       Signal.set(isReady, true)
     }
+
+    // Suppress unused variable warnings
+    let _ = (kickRef, snareRef, hihatRef)
 
     let togglePlay = _ => {
       if Signal.get(isPlaying) {
