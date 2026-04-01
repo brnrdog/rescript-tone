@@ -321,10 +321,10 @@ module Community = {
 type props = {}
 
 let make = (_props: props) => {
-  <Layout>
+  <>
     <Hero />
     <Features />
     <CodeDemo />
     <Community />
-  </Layout>
+  </>
 }
