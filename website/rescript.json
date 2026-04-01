@@ -14,6 +14,7 @@
   "dependencies": [
     "@rescript/core",
     "rescript-signals",
+    "rescript-tone",
     "xote",
     "basefn"
   ],

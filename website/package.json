@@ -16,6 +16,8 @@
     "basefn": "^1.9.1",
     "highlight.js": "^11.11.1",
     "rescript-signals": "^1.3.3",
+    "rescript-tone": "file:..",
+    "tone": "^15.1.22",
     "xote": "^4.16.1"
   },
   "devDependencies": {
