@@ -1594,4 +1594,148 @@ a:hover {
   .demo-slider-group {
     min-width: 100%;
   }
+
+  .drum-grid {
+    gap: var(--space-2);
+  }
+
+  .drum-steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .chord-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---- Drum Machine ---- */
+.drum-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.drum-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.drum-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 52px;
+  text-align: right;
+}
+
+.drum-steps {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.drum-step {
+  aspect-ratio: 1;
+  border: 2px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  cursor: pointer;
+  transition: all 0.1s ease;
+  min-height: 32px;
+}
+
+.drum-step:hover {
+  border-color: var(--text-muted);
+}
+
+.drum-step.on {
+  background: rgba(229, 53, 171, 0.2);
+  border-color: var(--pink-500);
+}
+
+.drum-step.current {
+  box-shadow: 0 0 0 2px var(--green-400);
+}
+
+.drum-step.on.current {
+  background: rgba(229, 53, 171, 0.4);
+  box-shadow: 0 0 0 2px var(--green-400);
+}
+
+/* ---- Chord Grid ---- */
+.chord-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.chord-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-3);
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chord-btn:hover {
+  border-color: var(--pink-400);
+  transform: translateY(-1px);
+}
+
+.chord-btn.active {
+  background: var(--pink-500);
+  border-color: var(--pink-400);
+  color: white;
+  transform: scale(0.96);
+}
+
+.chord-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.chord-btn.active .chord-name {
+  color: white;
+}
+
+.chord-notes {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.chord-btn.active .chord-notes {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ---- AM Synth Pad Buttons ---- */
+.demo-note-btn.pad-btn {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.demo-note-btn.pad-btn.active {
+  background: linear-gradient(135deg, var(--pink-500), var(--green-500));
+  border-color: transparent;
+}
+
+/* ---- Melody step override ---- */
+.seq-step.melody-step {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: var(--green-500);
+}
+
+.seq-step.melody-step.current {
+  background: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 0 2px var(--pink-400);
 }
