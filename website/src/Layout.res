@@ -317,20 +317,20 @@ module Footer = {
   let make = (_props: props) => {
     <footer class="footer">
       <div class="footer-inner">
-        <div class="footer-col">
+        <div class="footer-col footer-brand-col">
           <div class="footer-brand"> {Component.text("rescript-tone")} </div>
           <p class="footer-tagline">
             {Component.text("Type-safe Tone.js bindings for ReScript")}
           </p>
         </div>
         <div class="footer-col">
-          <div class="footer-col-title"> {Component.text("Documentation")} </div>
+          <div class="footer-col-title"> {Component.text("Docs")} </div>
           {Router.link(~to="/getting-started", ~children=[Component.text("Getting Started")], ())}
           {Router.link(~to="/api/core", ~children=[Component.text("API Reference")], ())}
           {Router.link(~to="/examples", ~children=[Component.text("Examples")], ())}
         </div>
         <div class="footer-col">
-          <div class="footer-col-title"> {Component.text("Community")} </div>
+          <div class="footer-col-title"> {Component.text("Links")} </div>
           {Component.element(
             "a",
             ~attrs=[
@@ -349,6 +349,16 @@ module Footer = {
               Component.attr("rel", "noopener noreferrer"),
             ],
             ~children=[Component.text("npm")],
+            (),
+          )}
+          {Component.element(
+            "a",
+            ~attrs=[
+              Component.attr("href", "https://tonejs.github.io/"),
+              Component.attr("target", "_blank"),
+              Component.attr("rel", "noopener noreferrer"),
+            ],
+            ~children=[Component.text("Tone.js")],
             (),
           )}
         </div>

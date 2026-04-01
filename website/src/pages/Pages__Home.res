@@ -1,63 +1,23 @@
 open Xote
 
-// ---- Clipboard binding ----
+// ---- JS bindings ----
 @val external navigator: {..} = "navigator"
 @val external setTimeout: (unit => unit, int) => unit = "setTimeout"
 
-// ---- Feature data ----
-type feature = {
-  iconName: Basefn.iconName,
-  title: string,
-  description: string,
-}
+let toFreq: string => 'a = Obj.magic
+let toTime: string => 'a = Obj.magic
+let floatToTime: float => 'a = Obj.magic
 
-let features: array<feature> = [
-  {
-    iconName: Basefn.Icon.Star,
-    title: "Full Tone.js Coverage",
-    description: "Bindings for synths, effects, sources, scheduling, and more.",
-  },
-  {
-    iconName: Basefn.Icon.Check,
-    title: "Type-Safe by Default",
-    description: "Catch errors at compile time with ReScript's powerful type system.",
-  },
-  {
-    iconName: Basefn.Icon.Heart,
-    title: "Web Audio Made Easy",
-    description: "Create interactive music in the browser with a simple, expressive API.",
-  },
-  {
-    iconName: Basefn.Icon.Loader,
-    title: "Zero Runtime Overhead",
-    description: "Direct bindings to Tone.js with no wrapper layer or performance cost.",
-  },
-  {
-    iconName: Basefn.Icon.Download,
-    title: "Modular Design",
-    description: "Import only what you need. Each module maps directly to Tone.js classes.",
-  },
-  {
-    iconName: Basefn.Icon.ChevronRight,
-    title: "Easy to Get Started",
-    description: "Add to your ReScript project in minutes. Works with existing Tone.js knowledge.",
-  },
-]
-
-// ---- Feature Card ----
-module FeatureCard = {
-  type props = {feature: feature}
-
-  let make = (props: props) => {
-    let {feature} = props
-    <div class="feature-card">
-      <div class="feature-icon">
-        {Basefn.Icon.make({name: feature.iconName, size: Md})}
-      </div>
-      <h3 class="feature-title"> {Component.text(feature.title)} </h3>
-      <p class="feature-desc"> {Component.text(feature.description)} </p>
-    </div>
-  }
+let makeEnvelope = (
+  ~attack: float,
+  ~decay: float,
+  ~sustain: float,
+  ~release: float,
+): Tone.Types.envelopeOptions => {
+  attack: floatToTime(attack),
+  decay: floatToTime(decay),
+  sustain,
+  release: floatToTime(release),
 }
 
 // ---- Hero ----
@@ -96,7 +56,7 @@ module Hero = {
             ],
             ~children=[
               Basefn.Icon.make({name: GitHub, size: Sm}),
-              Component.text(" View on GitHub"),
+              Component.text(" GitHub"),
             ],
             (),
           )}
@@ -109,207 +69,460 @@ module Hero = {
   }
 }
 
-// ---- Features Grid ----
+// ---- Mini Synth Demo ----
+module MiniSynth = {
+  type props = {}
+
+  let notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]
+  let labels = ["C", "D", "E", "F", "G", "A", "B", "C"]
+
+  let make = (_props: props) => {
+    let isReady = Signal.make(false)
+    let activeNote = Signal.make("")
+    let synthRef: ref<option<Tone.Synth.t>> = ref(None)
+
+    let initAudio = _ => {
+      let _ = Tone.Core.start()
+      let synth = Tone.Synth.makeWithOptions({
+        oscillator: {\"type": Triangle},
+        envelope: makeEnvelope(~attack=0.01, ~decay=0.2, ~sustain=0.3, ~release=0.8),
+      })
+      synth->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
+      synthRef := Some(synth)
+      Signal.set(isReady, true)
+    }
+
+    let playNote = (note: string) => _ => {
+      switch synthRef.contents {
+      | Some(synth) => {
+          synth->Tone.Synth.triggerAttackRelease(toFreq(note), toTime("8n"))->ignore
+          Signal.set(activeNote, note)
+          setTimeout(() => Signal.set(activeNote, ""), 200)
+        }
+      | None => ()
+      }
+    }
+
+    <div class="mini-demo">
+      <div class="mini-demo-label"> {Component.text("Synth")} </div>
+      <div class="mini-demo-body">
+        {Component.signalFragment(
+          Computed.make(() => {
+            if Signal.get(isReady) {
+              [
+                <div class="mini-piano">
+                  {Component.fragment(
+                    notes->Array.mapWithIndex((note, i) => {
+                      Component.element(
+                        "button",
+                        ~attrs=[
+                          Component.computedAttr("class", () =>
+                            "mini-key" ++ (Signal.get(activeNote) == note ? " active" : "")
+                          ),
+                        ],
+                        ~events=[("click", playNote(note))],
+                        ~children=[
+                          Component.text(
+                            switch labels->Array.get(i) {
+                            | Some(l) => l
+                            | None => ""
+                            },
+                          ),
+                        ],
+                        (),
+                      )
+                    }),
+                  )}
+                </div>,
+              ]
+            } else {
+              [
+                Component.element(
+                  "button",
+                  ~attrs=[Component.attr("class", "mini-start-btn")],
+                  ~events=[("click", initAudio)],
+                  ~children=[
+                    Basefn.Icon.make({name: ChevronRight, size: Sm}),
+                    Component.text(" Play"),
+                  ],
+                  (),
+                ),
+              ]
+            }
+          }),
+        )}
+      </div>
+      <div class="mini-demo-code">
+        <code>
+          {Component.text(`Synth.triggerAttackRelease("C4", "8n")`)}
+        </code>
+      </div>
+    </div>
+  }
+}
+
+// ---- Mini Effects Demo ----
+module MiniEffects = {
+  type props = {}
+
+  let make = (_props: props) => {
+    let isReady = Signal.make(false)
+    let reverbWet = Signal.make(50)
+    let activeNote = Signal.make("")
+
+    let synthRef: ref<option<Tone.FMSynth.t>> = ref(None)
+    let reverbRef: ref<option<Tone.Reverb.t>> = ref(None)
+
+    let initAudio = _ => {
+      let _ = Tone.Core.start()
+      let synth = Tone.FMSynth.make()
+      let reverb = Tone.Reverb.makeWithOptions({decay: 3.0, wet: 0.5})
+      synth->Tone.FMSynth.asAudioNode
+      ->Tone.AudioNode.connect(reverb->Tone.Reverb.asAudioNode)
+      ->ignore
+      reverb->Tone.Reverb.asAudioNode->Tone.AudioNode.toDestination->ignore
+      synthRef := Some(synth)
+      reverbRef := Some(reverb)
+      Signal.set(isReady, true)
+    }
+
+    let playNote = (note: string) => _ => {
+      switch synthRef.contents {
+      | Some(synth) => {
+          synth->Tone.FMSynth.triggerAttackRelease(toFreq(note), toTime("4n"))->ignore
+          Signal.set(activeNote, note)
+          setTimeout(() => Signal.set(activeNote, ""), 300)
+        }
+      | None => ()
+      }
+    }
+
+    let notes = ["C3", "E3", "G3", "C4"]
+
+    <div class="mini-demo">
+      <div class="mini-demo-label"> {Component.text("Effects")} </div>
+      <div class="mini-demo-body">
+        {Component.signalFragment(
+          Computed.make(() => {
+            if Signal.get(isReady) {
+              [
+                <div class="mini-controls">
+                  <span class="mini-slider-label">
+                    {Component.textSignal(() =>
+                      "Reverb " ++ Int.toString(Signal.get(reverbWet)) ++ "%"
+                    )}
+                  </span>
+                  {Component.element(
+                    "input",
+                    ~attrs=[
+                      Component.attr("type", "range"),
+                      Component.attr("min", "0"),
+                      Component.attr("max", "100"),
+                      Component.computedAttr("value", () =>
+                        Int.toString(Signal.get(reverbWet))
+                      ),
+                      Component.attr("class", "mini-slider"),
+                    ],
+                    ~events=[
+                      ("input", evt => {
+                        let val: string = Obj.magic(evt)["target"]["value"]
+                        let intVal = Int.fromString(val)->Option.getOr(50)
+                        Signal.set(reverbWet, intVal)
+                        switch reverbRef.contents {
+                        | Some(reverb) =>
+                          Tone.Reverb.wet(reverb)->Tone.Param.setValue(
+                            Int.toFloat(intVal) /. 100.0,
+                          )
+                        | None => ()
+                        }
+                      }),
+                    ],
+                    (),
+                  )}
+                </div>,
+                <div class="mini-note-row">
+                  {Component.fragment(
+                    notes->Array.map(note => {
+                      Component.element(
+                        "button",
+                        ~attrs=[
+                          Component.computedAttr("class", () =>
+                            "mini-note" ++ (Signal.get(activeNote) == note ? " active" : "")
+                          ),
+                        ],
+                        ~events=[("click", playNote(note))],
+                        ~children=[Component.text(note)],
+                        (),
+                      )
+                    }),
+                  )}
+                </div>,
+              ]
+            } else {
+              [
+                Component.element(
+                  "button",
+                  ~attrs=[Component.attr("class", "mini-start-btn")],
+                  ~events=[("click", initAudio)],
+                  ~children=[
+                    Basefn.Icon.make({name: ChevronRight, size: Sm}),
+                    Component.text(" Play"),
+                  ],
+                  (),
+                ),
+              ]
+            }
+          }),
+        )}
+      </div>
+      <div class="mini-demo-code">
+        <code>
+          {Component.text(`FMSynth -> Reverb -> Destination`)}
+        </code>
+      </div>
+    </div>
+  }
+}
+
+// ---- Mini Sequencer Demo ----
+module MiniSequencer = {
+  type props = {}
+
+  let make = (_props: props) => {
+    let isReady = Signal.make(false)
+    let isPlaying = Signal.make(false)
+    let currentStep = Signal.make(-1)
+
+    let steps = [true, false, true, false, true, true, false, true]
+    let stepSignals = steps->Array.map(v => Signal.make(v))
+    let stepNotes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]
+
+    let synthRef: ref<option<Tone.Synth.t>> = ref(None)
+    let loopRef: ref<option<Tone.Loop.t>> = ref(None)
+
+    let initAudio = _ => {
+      let _ = Tone.Core.start()
+      let synth = Tone.Synth.makeWithOptions({
+        oscillator: {\"type": Square},
+        envelope: makeEnvelope(~attack=0.01, ~decay=0.1, ~sustain=0.1, ~release=0.3),
+      })
+      synth->Tone.Synth.asAudioNode->Tone.AudioNode.toDestination->ignore
+
+      let stepIdx = ref(0)
+      let loop = Tone.Loop.make(_time => {
+        let idx = mod(stepIdx.contents, 8)
+        Signal.set(currentStep, idx)
+        let isActive = switch stepSignals->Array.get(idx) {
+        | Some(s) => Signal.get(s)
+        | None => false
+        }
+        if isActive {
+          let note = switch stepNotes->Array.get(idx) {
+          | Some(n) => n
+          | None => "C4"
+          }
+          synth->Tone.Synth.triggerAttackRelease(toFreq(note), toTime("16n"))->ignore
+        }
+        stepIdx := stepIdx.contents + 1
+      }, toTime("8n"))
+
+      synthRef := Some(synth)
+      loopRef := Some(loop)
+      Signal.set(isReady, true)
+    }
+
+    let togglePlay = _ => {
+      if Signal.get(isPlaying) {
+        switch loopRef.contents {
+        | Some(loop) => loop->Tone.Loop.stop->ignore
+        | None => ()
+        }
+        Tone.Core.getTransport()->Tone.Transport.stop->ignore
+        Signal.set(isPlaying, false)
+        Signal.set(currentStep, -1)
+      } else {
+        switch loopRef.contents {
+        | Some(loop) => loop->Tone.Loop.start->ignore
+        | None => ()
+        }
+        Tone.Core.getTransport()->Tone.Transport.start->ignore
+        Signal.set(isPlaying, true)
+      }
+    }
+
+    <div class="mini-demo">
+      <div class="mini-demo-label"> {Component.text("Sequencer")} </div>
+      <div class="mini-demo-body">
+        {Component.signalFragment(
+          Computed.make(() => {
+            if Signal.get(isReady) {
+              [
+                <div class="mini-seq-row">
+                  {Component.element(
+                    "button",
+                    ~attrs=[
+                      Component.computedAttr("class", () =>
+                        "mini-play-btn" ++ (Signal.get(isPlaying) ? " playing" : "")
+                      ),
+                    ],
+                    ~events=[("click", togglePlay)],
+                    ~children=[
+                      Component.textSignal(() =>
+                        Signal.get(isPlaying) ? "Stop" : "Play"
+                      ),
+                    ],
+                    (),
+                  )}
+                  <div class="mini-steps">
+                    {Component.fragment(
+                      stepSignals->Array.mapWithIndex((stepSig, i) => {
+                        Component.element(
+                          "button",
+                          ~attrs=[
+                            Component.computedAttr("class", () => {
+                              let active = Signal.get(stepSig)
+                              let isCurrent = Signal.get(currentStep) == i
+                              "mini-step" ++
+                              (active ? " on" : "") ++
+                              (isCurrent ? " current" : "")
+                            }),
+                          ],
+                          ~events=[("click", _ => Signal.update(stepSig, v => !v))],
+                          (),
+                        )
+                      }),
+                    )}
+                  </div>
+                </div>,
+              ]
+            } else {
+              [
+                Component.element(
+                  "button",
+                  ~attrs=[Component.attr("class", "mini-start-btn")],
+                  ~events=[("click", initAudio)],
+                  ~children=[
+                    Basefn.Icon.make({name: ChevronRight, size: Sm}),
+                    Component.text(" Play"),
+                  ],
+                  (),
+                ),
+              ]
+            }
+          }),
+        )}
+      </div>
+      <div class="mini-demo-code">
+        <code>
+          {Component.text(`Loop.make(fn, "8n") -> Transport.start()`)}
+        </code>
+      </div>
+    </div>
+  }
+}
+
+// ---- Demos Grid ----
+module DemosGrid = {
+  type props = {}
+
+  let make = (_props: props) => {
+    <section class="demos-section">
+      <div class="demos-grid">
+        <MiniSynth />
+        <MiniEffects />
+        <MiniSequencer />
+      </div>
+      <div class="demos-cta">
+        {Router.link(
+          ~to="/examples",
+          ~attrs=[Component.attr("class", "demos-more-link")],
+          ~children=[
+            Component.text("See all examples "),
+            Basefn.Icon.make({name: ChevronRight, size: Sm}),
+          ],
+          (),
+        )}
+      </div>
+    </section>
+  }
+}
+
+// ---- Features ----
+type feature = {
+  iconName: Basefn.iconName,
+  title: string,
+  description: string,
+}
+
+let features: array<feature> = [
+  {
+    iconName: Basefn.Icon.Check,
+    title: "Type-Safe",
+    description: "Catch errors at compile time. Every synth, effect, and parameter is fully typed.",
+  },
+  {
+    iconName: Basefn.Icon.Loader,
+    title: "Zero Overhead",
+    description: "Direct bindings with no wrapper layer. Compiles to clean Tone.js calls.",
+  },
+  {
+    iconName: Basefn.Icon.Download,
+    title: "Modular",
+    description: "Import only what you need. Each module maps to a Tone.js class.",
+  },
+]
+
 module Features = {
   type props = {}
 
   let make = (_props: props) => {
     <section class="features-section">
-      <h2 class="section-title"> {Component.text("Why rescript-tone?")} </h2>
-      <div class="features-grid">
+      <div class="features-list">
         {Component.fragment(
-          features->Array.map(f => <FeatureCard feature=f />),
+          features->Array.map(f => {
+            <div class="feature-item">
+              <div class="feature-icon">
+                {Basefn.Icon.make({name: f.iconName, size: Sm})}
+              </div>
+              <div>
+                <div class="feature-title"> {Component.text(f.title)} </div>
+                <p class="feature-desc"> {Component.text(f.description)} </p>
+              </div>
+            </div>
+          }),
         )}
       </div>
     </section>
   }
 }
 
-// ---- Code Demo ----
-module CodeDemo = {
+// ---- CTA ----
+module CTA = {
   type props = {}
 
   let make = (_props: props) => {
-    let activeTab = Signal.make("synth")
-    let copied = Signal.make(false)
-
-    let synthCode = `open Tone
-
-let synth = Synth.make()
-synth->Synth.asAudioNode->AudioNode.toDestination
-
-// Play a note
-synth->Synth.triggerAttackRelease("C4", "8n")`
-
-    let effectsCode = `open Tone
-
-let synth = FMSynth.make()
-let reverb = Reverb.makeWithOptions({decay: 2.5})
-let delay = FeedbackDelay.makeWithOptions({
-  delayTime: "8n",
-  feedback: 0.3,
-})
-
-synth->FMSynth.asAudioNode
-->AudioNode.connect(reverb->Reverb.asAudioNode)
-->AudioNode.connect(delay->FeedbackDelay.asAudioNode)
-->AudioNode.toDestination`
-
-    let schedulingCode = `open Tone
-
-let synth = Synth.make()
-synth->Synth.asAudioNode->AudioNode.toDestination
-
-// Schedule a repeating pattern
-let _loop = Loop.makeWithCallback(~callback=_time => {
-  synth->Synth.triggerAttackRelease("C4", "8n")
-}, ~interval="4n")
-
-Transport.start()`
-
-    let getCode = () => {
-      switch Signal.get(activeTab) {
-      | "effects" => effectsCode
-      | "scheduling" => schedulingCode
-      | _ => synthCode
-      }
-    }
-
-    let copyToClipboard = () => {
-      let code = getCode()
-      let _ = navigator["clipboard"]["writeText"](code)
-      Signal.set(copied, true)
-      setTimeout(() => Signal.set(copied, false), 2000)
-    }
-
-    <section class="code-demo-section">
-      <h2 class="section-title"> {Component.text("Expressive & Type-Safe")} </h2>
-      <div class="code-demo">
-        <div class="code-demo-tabs">
-          {Component.element(
-            "button",
-            ~attrs=[
-              Component.computedAttr("class", () =>
-                "code-tab" ++ (Signal.get(activeTab) == "synth" ? " active" : "")
-              ),
-            ],
-            ~events=[("click", _ => Signal.set(activeTab, "synth"))],
-            ~children=[Component.text("Synth.res")],
-            (),
-          )}
-          {Component.element(
-            "button",
-            ~attrs=[
-              Component.computedAttr("class", () =>
-                "code-tab" ++ (Signal.get(activeTab) == "effects" ? " active" : "")
-              ),
-            ],
-            ~events=[("click", _ => Signal.set(activeTab, "effects"))],
-            ~children=[Component.text("Effects.res")],
-            (),
-          )}
-          {Component.element(
-            "button",
-            ~attrs=[
-              Component.computedAttr("class", () =>
-                "code-tab" ++ (Signal.get(activeTab) == "scheduling" ? " active" : "")
-              ),
-            ],
-            ~events=[("click", _ => Signal.set(activeTab, "scheduling"))],
-            ~children=[Component.text("Scheduling.res")],
-            (),
-          )}
-        </div>
-        <div class="code-demo-body">
-          {Component.element(
-            "button",
-            ~attrs=[
-              Component.computedAttr("class", () =>
-                "code-copy-btn" ++ (Signal.get(copied) ? " copied" : "")
-              ),
-              Component.attr("title", "Copy code"),
-            ],
-            ~events=[("click", _ => copyToClipboard())],
-            ~children=[
-              Component.element(
-                "span",
-                ~attrs=[
-                  Component.computedAttr("style", () =>
-                    Signal.get(copied) ? "display: inline-flex; align-items: center" : "display: none"
-                  ),
-                ],
-                ~children=[Basefn.Icon.make({name: Check, size: Sm}), Component.text(" Copied")],
-                (),
-              ),
-              Component.element(
-                "span",
-                ~attrs=[
-                  Component.computedAttr("style", () =>
-                    Signal.get(copied) ? "display: none" : "display: inline-flex; align-items: center"
-                  ),
-                ],
-                ~children=[Basefn.Icon.make({name: Copy, size: Sm}), Component.text(" Copy")],
-                (),
-              ),
-            ],
-            (),
-          )}
-          <div class="code-demo-content">
-            {Component.signalFragment(
-              Computed.make(() => [<CodeBlock code={getCode()} />])
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  }
-}
-
-// ---- Community CTA ----
-module Community = {
-  type props = {}
-
-  let make = (_props: props) => {
-    <section class="community-section">
-      <h2 class="section-title"> {Component.text("Start Building")} </h2>
-      <p class="community-desc">
-        {Component.text(
-          "Add rescript-tone to your project and start creating audio experiences with the safety of ReScript.",
-        )}
+    <section class="cta-section">
+      <h2 class="cta-title"> {Component.text("Ready to build?")} </h2>
+      <p class="cta-desc">
+        {Component.text("Add rescript-tone to your project and start creating audio experiences.")}
       </p>
-      <div class="community-links">
+      <div class="cta-install">
+        <code> {Component.text("npm install rescript-tone tone")} </code>
+      </div>
+      <div class="cta-actions">
         {Router.link(
           ~to="/getting-started",
           ~attrs=[Component.attr("class", "btn btn-primary")],
-          ~children=[Component.text("Read the Docs")],
-          (),
-        )}
-        {Component.element(
-          "a",
-          ~attrs=[
-            Component.attr("class", "btn btn-secondary"),
-            Component.attr("href", "https://github.com/brnrdog/rescript-tone"),
-            Component.attr("target", "_blank"),
-            Component.attr("rel", "noopener noreferrer"),
-          ],
           ~children=[
-            Basefn.Icon.make({name: GitHub, size: Sm}),
-            Component.text(" GitHub"),
+            Component.text("Get Started "),
+            Basefn.Icon.make({name: ChevronRight, size: Sm}),
           ],
           (),
         )}
-        {Component.element(
-          "a",
-          ~attrs=[
-            Component.attr("class", "btn btn-secondary"),
-            Component.attr("href", "https://www.npmjs.com/package/rescript-tone"),
-            Component.attr("target", "_blank"),
-            Component.attr("rel", "noopener noreferrer"),
-          ],
-          ~children=[
-            Basefn.Icon.make({name: Download, size: Sm}),
-            Component.text(" npm"),
-          ],
+        {Router.link(
+          ~to="/api/core",
+          ~attrs=[Component.attr("class", "btn btn-secondary")],
+          ~children=[Component.text("API Reference")],
           (),
         )}
       </div>
@@ -323,8 +536,8 @@ type props = {}
 let make = (_props: props) => {
   <>
     <Hero />
+    <DemosGrid />
     <Features />
-    <CodeDemo />
-    <Community />
+    <CTA />
   </>
 }
