@@ -70,6 +70,9 @@ module SearchModal = {
   type props = {}
 
   let make = (_props: props) => {
+    // The modal show/hide is fine with signalFragment since the whole modal
+    // is either present or absent. But the inner results list must NOT
+    // use signalFragment - use computedAttr for the active class instead.
     let searchContent = Computed.make(() => {
       if Signal.get(searchOpen) {
         [
@@ -124,6 +127,8 @@ module SearchModal = {
                 <span class="search-shortcut"> {Component.text("ESC")} </span>
               </div>
               <div class="search-results">
+                // Use signalFragment only for the filtered list (which changes structurally),
+                // but use computedAttr for the active highlight (no DOM recreation).
                 {Component.signalFragment(
                   Computed.make(() => {
                     let items = Signal.get(filteredItems)
@@ -252,6 +257,8 @@ module Header = {
             ~children=[Basefn.Icon.make({name: GitHub, size: Sm})],
             (),
           )}
+          // Theme toggle: render BOTH icons, toggle visibility via style
+          // to avoid signalFragment destroying/recreating DOM nodes
           {Component.element(
             "button",
             ~attrs=[
@@ -260,12 +267,29 @@ module Header = {
             ],
             ~events=[("click", _ => toggleTheme())],
             ~children=[
-              Component.signalFragment(
-                Computed.make(() =>
-                  Signal.get(Basefn.Theme.currentTheme) == Dark
-                    ? [Basefn.Icon.make({name: Sun, size: Sm})]
-                    : [Basefn.Icon.make({name: Moon, size: Sm})]
-                ),
+              Component.element(
+                "span",
+                ~attrs=[
+                  Component.computedAttr("style", () =>
+                    Signal.get(Basefn.Theme.currentTheme) == Dark
+                      ? "display: inline-flex"
+                      : "display: none"
+                  ),
+                ],
+                ~children=[Basefn.Icon.make({name: Sun, size: Sm})],
+                (),
+              ),
+              Component.element(
+                "span",
+                ~attrs=[
+                  Component.computedAttr("style", () =>
+                    Signal.get(Basefn.Theme.currentTheme) == Dark
+                      ? "display: none"
+                      : "display: inline-flex"
+                  ),
+                ],
+                ~children=[Basefn.Icon.make({name: Moon, size: Sm})],
+                (),
               ),
             ],
             (),

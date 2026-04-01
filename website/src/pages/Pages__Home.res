@@ -231,12 +231,25 @@ Transport.start()`
             ],
             ~events=[("click", _ => copyToClipboard())],
             ~children=[
-              Component.signalFragment(
-                Computed.make(() =>
-                  Signal.get(copied)
-                    ? [Basefn.Icon.make({name: Check, size: Sm}), Component.text(" Copied")]
-                    : [Basefn.Icon.make({name: Copy, size: Sm}), Component.text(" Copy")]
-                ),
+              Component.element(
+                "span",
+                ~attrs=[
+                  Component.computedAttr("style", () =>
+                    Signal.get(copied) ? "display: inline-flex; align-items: center" : "display: none"
+                  ),
+                ],
+                ~children=[Basefn.Icon.make({name: Check, size: Sm}), Component.text(" Copied")],
+                (),
+              ),
+              Component.element(
+                "span",
+                ~attrs=[
+                  Component.computedAttr("style", () =>
+                    Signal.get(copied) ? "display: none" : "display: inline-flex; align-items: center"
+                  ),
+                ],
+                ~children=[Basefn.Icon.make({name: Copy, size: Sm}), Component.text(" Copy")],
+                (),
               ),
             ],
             (),
