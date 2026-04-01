@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "rescript -w & vite",
-    "build": "rescript && vite build",
+    "build": "rescript && vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview",
     "res:build": "rescript",
     "res:watch": "rescript -w",
