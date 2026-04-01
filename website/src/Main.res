@@ -4,14 +4,11 @@ open Xote
 
 Router.init(~basePath="/rescript-tone", ())
 
-// If the page was prerendered (SSR), hydrate to attach reactivity.
-// Otherwise, mount fresh (dev server, or non-prerendered 404 fallback).
-let hasSSRContent: bool = %raw(`
-  document.getElementById('app')?.childNodes.length > 0
+// Prerendered HTML provides instant first paint and SEO.
+// Clear it and mount fresh for full reactivity — the transition
+// is imperceptible since the JS executes immediately after load.
+%%raw(`
+  var el = document.getElementById('app');
+  if (el) el.innerHTML = '';
 `)
-
-if hasSSRContent {
-  Hydration.hydrateById(() => <App />, "app")
-} else {
-  Component.mountById(<App />, "app")
-}
+Component.mountById(<App />, "app")
