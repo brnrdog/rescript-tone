@@ -120,6 +120,131 @@ module DocsBreadcrumb = {
   }
 }
 
+// ---- Table of Contents ----
+module TableOfContents = {
+  type props = {}
+
+  type tocEntry = {
+    id: string,
+    text: string,
+    level: int,
+  }
+
+  let make = (_props: props) => {
+    let entries: Signal.t<array<tocEntry>> = Signal.make([])
+    let activeId = Signal.make("")
+
+    // Extract headings from the .docs-content container after render
+    let _ = Effect.run(() => {
+      let extract: unit => unit = %raw(`function() {
+        setTimeout(function() {
+          var container = document.querySelector('.docs-content');
+          if (!container) return;
+          var headings = container.querySelectorAll('h2[id], h3[id]');
+          var items = [];
+          headings.forEach(function(h) {
+            items.push({
+              id: h.id,
+              text: h.textContent || '',
+              level: h.tagName === 'H2' ? 2 : 3
+            });
+          });
+          if (items.length > 0) {
+            window.__tocSetEntries(items);
+          }
+        }, 100);
+      }`)
+
+      let setEntries: array<tocEntry> => unit = %raw(`function(items) {
+        window.__tocSetEntries = function() {};
+      }`)
+      ignore(setEntries)
+
+      // Register the setter globally so the raw JS can call it
+      let _: unit = %raw(`window.__tocSetEntries = function(items) {}`)
+      let registerSetter: (array<tocEntry> => unit) => unit = %raw(`function(fn) {
+        window.__tocSetEntries = fn;
+      }`)
+      registerSetter(items => Signal.set(entries, items))
+
+      extract()
+
+      // Scroll spy: track which heading is active
+      let onScroll: unit => unit = %raw(`function() {
+        var container = document.querySelector('.docs-content');
+        if (!container) return;
+        var headings = container.querySelectorAll('h2[id], h3[id]');
+        var current = '';
+        var offset = 100;
+        headings.forEach(function(h) {
+          var rect = h.getBoundingClientRect();
+          if (rect.top <= offset) {
+            current = h.id;
+          }
+        });
+        if (window.__tocSetActive) {
+          window.__tocSetActive(current);
+        }
+      }`)
+
+      let registerActive: (string => unit) => unit = %raw(`function(fn) {
+        window.__tocSetActive = fn;
+      }`)
+      registerActive(id => Signal.set(activeId, id))
+
+      let addScroll: unit => unit = %raw(`function() {
+        window.addEventListener('scroll', function() {
+          var container = document.querySelector('.docs-content');
+          if (!container) return;
+          var headings = container.querySelectorAll('h2[id], h3[id]');
+          var current = '';
+          var offset = 100;
+          headings.forEach(function(h) {
+            var rect = h.getBoundingClientRect();
+            if (rect.top <= offset) {
+              current = h.id;
+            }
+          });
+          if (window.__tocSetActive) {
+            window.__tocSetActive(current);
+          }
+        }, { passive: true });
+      }`)
+      ignore(onScroll)
+      addScroll()
+
+      None
+    })
+
+    <aside class="docs-toc">
+      <div class="toc-title"> {Component.text("On this page")} </div>
+      <nav class="toc-nav">
+        {Component.signalFragment(
+          Computed.make(() => {
+            let items = Signal.get(entries)
+            let active = Signal.get(activeId)
+            items->Array.map(entry => {
+              let className =
+                "toc-link" ++
+                (entry.level == 3 ? " toc-link-sub" : "") ++
+                (active == entry.id ? " active" : "")
+              Component.element(
+                "a",
+                ~attrs=[
+                  Component.attr("href", "#" ++ entry.id),
+                  Component.attr("class", className),
+                ],
+                ~children=[Component.text(entry.text)],
+                (),
+              )
+            })
+          }),
+        )}
+      </nav>
+    </aside>
+  }
+}
+
 // ---- Prev/Next ----
 module PrevNextNav = {
   type props = {currentPath: string}
@@ -217,6 +342,7 @@ let make = (props: props) => {
           <PrevNextNav currentPath />
           <FeedbackWidget />
         </div>
+        <TableOfContents />
       </div>
     }
   />
