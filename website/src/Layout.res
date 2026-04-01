@@ -1,40 +1,19 @@
 open Xote
 
-// ---- External bindings ----
-@val external localStorage: {..} = "localStorage"
-@val external document: {..} = "document"
-@val external window: {..} = "window"
-
-// ---- Theme ----
-let getInitialTheme = () => {
-  try {
-    let stored: string = localStorage["getItem"]("theme")
-    if stored == "light" {
-      "light"
-    } else {
-      "dark"
+// ---- Theme integration via Basefn ----
+let _ = {
+  // Initialize basefn theme with dark default
+  let stored: option<string> = %raw(`localStorage.getItem('basefn-theme')`)
+  switch stored {
+  | Some(_) => Basefn.Theme.init()
+  | None => {
+      Basefn.Theme.applyTheme(Dark)
+      Signal.set(Basefn.Theme.currentTheme, Dark)
     }
-  } catch {
-  | _ => "dark"
   }
 }
 
-let theme = Signal.make(getInitialTheme())
-
-let applyTheme = (t: string) => {
-  let _ = document["documentElement"]["setAttribute"]("data-theme", t)
-  let _ = localStorage["setItem"]("theme", t)
-}
-
-let toggleTheme = () => {
-  let next = if Signal.get(theme) == "dark" {
-    "light"
-  } else {
-    "dark"
-  }
-  Signal.set(theme, next)
-  applyTheme(next)
-}
+let toggleTheme = () => Basefn.Theme.toggleTheme()
 
 // ---- Search data ----
 type searchItem = {
@@ -97,13 +76,14 @@ module SearchModal = {
           <div class="search-overlay">
             <div class="search-modal">
               <div class="search-input-wrapper">
+                <Basefn.Icon name={Search} size={Sm} />
                 {Component.element(
                   "input",
                   ~attrs=[
                     Component.attr("type", "text"),
                     Component.attr("class", "search-input"),
                     Component.attr("placeholder", "Search documentation..."),
-                    Component.computedAttr("value", () => Signal.get(searchQuery)),
+                    Component.attr("autofocus", "true"),
                   ],
                   ~events=[
                     ("input", evt => {
@@ -146,34 +126,46 @@ module SearchModal = {
               <div class="search-results">
                 {Component.signalFragment(
                   Computed.make(() => {
-                    Signal.get(filteredItems)->Array.mapWithIndex((item, i) => {
-                      Component.element(
-                        "div",
-                        ~attrs=[
-                          Component.computedAttr("class", () =>
-                            "search-result-item" ++
-                            (Signal.get(searchIndex) == i ? " active" : "")
-                          ),
-                        ],
-                        ~events=[
-                          ("click", _ => {
-                            Signal.set(searchIndex, i)
-                            navigateToResult()
-                          }),
-                        ],
-                        ~children=[
-                          <span class="search-result-section">
-                            {Component.text(item.section)}
-                          </span>,
-                          <span class="search-result-title">
-                            {Component.text(item.title)}
-                          </span>,
-                        ],
-                        (),
-                      )
-                    })
+                    let items = Signal.get(filteredItems)
+                    if Array.length(items) == 0 {
+                      [
+                        <div class="search-empty">
+                          {Component.text("No results found.")}
+                        </div>,
+                      ]
+                    } else {
+                      items->Array.mapWithIndex((item, i) => {
+                        Component.element(
+                          "div",
+                          ~attrs=[
+                            Component.computedAttr("class", () =>
+                              "search-result-item" ++
+                              (Signal.get(searchIndex) == i ? " active" : "")
+                            ),
+                          ],
+                          ~events=[
+                            ("click", _ => {
+                              Signal.set(searchIndex, i)
+                              navigateToResult()
+                            }),
+                          ],
+                          ~children=[
+                            <span class="search-result-section">
+                              {Component.text(item.section)}
+                            </span>,
+                            <span class="search-result-title">
+                              {Component.text(item.title)}
+                            </span>,
+                          ],
+                          (),
+                        )
+                      })
+                    }
                   }),
                 )}
+              </div>
+              <div class="search-footer">
+                {Component.text("Use arrow keys to navigate, Enter to select, Esc to close")}
               </div>
             </div>
             {Component.element(
@@ -203,14 +195,6 @@ module Header = {
   type props = {}
 
   let make = (_props: props) => {
-    let themeIcon = Computed.make(() =>
-      if Signal.get(theme) == "dark" {
-        "Light"
-      } else {
-        "Dark"
-      }
-    )
-
     <header class="header">
       <div class="header-inner">
         <div class="header-left">
@@ -247,33 +231,53 @@ module Header = {
             ],
             ~events=[("click", _ => Signal.set(searchOpen, true))],
             ~children=[
-              <span> {Component.text("Search")} </span>,
-              <kbd> {Component.text("\u2318K")} </kbd>,
+              Basefn.Icon.make({name: Search, size: Sm}),
+              <span class="search-trigger-text"> {Component.text("Search docs...")} </span>,
+              <div class="search-trigger-keys">
+                <kbd> {Component.text("\u2318")} </kbd>
+                <kbd> {Component.text("K")} </kbd>
+              </div>,
             ],
             (),
           )}
           {Component.element(
             "a",
             ~attrs=[
-              Component.attr("class", "header-github"),
+              Component.attr("class", "header-icon-btn"),
               Component.attr("href", "https://github.com/brnrdog/rescript-tone"),
               Component.attr("target", "_blank"),
               Component.attr("rel", "noopener noreferrer"),
               Component.attr("title", "GitHub"),
             ],
-            ~children=[Component.text("GitHub")],
+            ~children=[Basefn.Icon.make({name: GitHub, size: Sm})],
             (),
           )}
           {Component.element(
             "button",
             ~attrs=[
-              Component.attr("class", "theme-toggle"),
+              Component.attr("class", "header-icon-btn"),
               Component.attr("title", "Toggle theme"),
             ],
             ~events=[("click", _ => toggleTheme())],
             ~children=[
-              Component.textSignal(() => Signal.get(themeIcon)),
+              Component.signalFragment(
+                Computed.make(() =>
+                  Signal.get(Basefn.Theme.currentTheme) == Dark
+                    ? [Basefn.Icon.make({name: Sun, size: Sm})]
+                    : [Basefn.Icon.make({name: Moon, size: Sm})]
+                ),
+              ),
             ],
+            (),
+          )}
+          {Component.element(
+            "button",
+            ~attrs=[
+              Component.attr("class", "header-icon-btn mobile-menu-btn"),
+              Component.attr("title", "Menu"),
+            ],
+            ~events=[("click", _ => Signal.set(searchOpen, true))],
+            ~children=[Basefn.Icon.make({name: Menu, size: Sm})],
             (),
           )}
         </div>
@@ -333,9 +337,9 @@ module Footer = {
 }
 
 // ---- Global keyboard shortcut ----
-let _ = Effect.run(() => {
-  applyTheme(Signal.get(theme))
+@val external document: {..} = "document"
 
+let _ = Effect.run(() => {
   let handler = evt => {
     let e: {..} = Obj.magic(evt)
     let key: string = e["key"]

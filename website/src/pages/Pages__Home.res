@@ -6,39 +6,39 @@ open Xote
 
 // ---- Feature data ----
 type feature = {
-  icon: string,
+  iconName: Basefn.iconName,
   title: string,
   description: string,
 }
 
 let features: array<feature> = [
   {
-    icon: "\u{1F3B9}",
+    iconName: Basefn.Icon.Star,
     title: "Full Tone.js Coverage",
     description: "Bindings for synths, effects, sources, scheduling, and more.",
   },
   {
-    icon: "\u{1F512}",
+    iconName: Basefn.Icon.Check,
     title: "Type-Safe by Default",
     description: "Catch errors at compile time with ReScript's powerful type system.",
   },
   {
-    icon: "\u{1F3A7}",
+    iconName: Basefn.Icon.Heart,
     title: "Web Audio Made Easy",
     description: "Create interactive music in the browser with a simple, expressive API.",
   },
   {
-    icon: "\u26A1",
+    iconName: Basefn.Icon.Loader,
     title: "Zero Runtime Overhead",
     description: "Direct bindings to Tone.js with no wrapper layer or performance cost.",
   },
   {
-    icon: "\u{1F4E6}",
+    iconName: Basefn.Icon.Download,
     title: "Modular Design",
     description: "Import only what you need. Each module maps directly to Tone.js classes.",
   },
   {
-    icon: "\u{1F680}",
+    iconName: Basefn.Icon.ChevronRight,
     title: "Easy to Get Started",
     description: "Add to your ReScript project in minutes. Works with existing Tone.js knowledge.",
   },
@@ -51,7 +51,9 @@ module FeatureCard = {
   let make = (props: props) => {
     let {feature} = props
     <div class="feature-card">
-      <div class="feature-icon"> {Component.text(feature.icon)} </div>
+      <div class="feature-icon">
+        {Basefn.Icon.make({name: feature.iconName, size: Md})}
+      </div>
       <h3 class="feature-title"> {Component.text(feature.title)} </h3>
       <p class="feature-desc"> {Component.text(feature.description)} </p>
     </div>
@@ -78,13 +80,24 @@ module Hero = {
           {Router.link(
             ~to="/getting-started",
             ~attrs=[Component.attr("class", "btn btn-primary")],
-            ~children=[Component.text("Get Started")],
+            ~children=[
+              Component.text("Get Started "),
+              Basefn.Icon.make({name: ChevronRight, size: Sm}),
+            ],
             (),
           )}
-          {Router.link(
-            ~to="/api/core",
-            ~attrs=[Component.attr("class", "btn btn-secondary")],
-            ~children=[Component.text("API Reference")],
+          {Component.element(
+            "a",
+            ~attrs=[
+              Component.attr("class", "btn btn-secondary"),
+              Component.attr("href", "https://github.com/brnrdog/rescript-tone"),
+              Component.attr("target", "_blank"),
+              Component.attr("rel", "noopener noreferrer"),
+            ],
+            ~children=[
+              Basefn.Icon.make({name: GitHub, size: Sm}),
+              Component.text(" View on GitHub"),
+            ],
             (),
           )}
         </div>
@@ -181,7 +194,7 @@ Transport.start()`
               ),
             ],
             ~events=[("click", _ => Signal.set(activeTab, "synth"))],
-            ~children=[Component.text("Synth")],
+            ~children=[Component.text("Synth.res")],
             (),
           )}
           {Component.element(
@@ -192,7 +205,7 @@ Transport.start()`
               ),
             ],
             ~events=[("click", _ => Signal.set(activeTab, "effects"))],
-            ~children=[Component.text("Effects Chain")],
+            ~children=[Component.text("Effects.res")],
             (),
           )}
           {Component.element(
@@ -203,32 +216,36 @@ Transport.start()`
               ),
             ],
             ~events=[("click", _ => Signal.set(activeTab, "scheduling"))],
-            ~children=[Component.text("Scheduling")],
+            ~children=[Component.text("Scheduling.res")],
             (),
           )}
+        </div>
+        <div class="code-demo-body">
           {Component.element(
             "button",
             ~attrs=[
-              Component.attr("class", "code-copy-btn"),
+              Component.computedAttr("class", () =>
+                "code-copy-btn" ++ (Signal.get(copied) ? " copied" : "")
+              ),
               Component.attr("title", "Copy code"),
             ],
             ~events=[("click", _ => copyToClipboard())],
             ~children=[
-              Component.textSignal(() =>
-                if Signal.get(copied) {
-                  "Copied!"
-                } else {
-                  "Copy"
-                }
+              Component.signalFragment(
+                Computed.make(() =>
+                  Signal.get(copied)
+                    ? [Basefn.Icon.make({name: Check, size: Sm}), Component.text(" Copied")]
+                    : [Basefn.Icon.make({name: Copy, size: Sm}), Component.text(" Copy")]
+                ),
               ),
             ],
             (),
           )}
-        </div>
-        <div class="code-demo-content">
-          {Component.signalFragment(
-            Computed.make(() => [<CodeBlock code={getCode()} />])
-          )}
+          <div class="code-demo-content">
+            {Component.signalFragment(
+              Computed.make(() => [<CodeBlock code={getCode()} />])
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -262,7 +279,10 @@ module Community = {
             Component.attr("target", "_blank"),
             Component.attr("rel", "noopener noreferrer"),
           ],
-          ~children=[Component.text("View on GitHub")],
+          ~children=[
+            Basefn.Icon.make({name: GitHub, size: Sm}),
+            Component.text(" GitHub"),
+          ],
           (),
         )}
         {Component.element(
@@ -273,7 +293,10 @@ module Community = {
             Component.attr("target", "_blank"),
             Component.attr("rel", "noopener noreferrer"),
           ],
-          ~children=[Component.text("npm")],
+          ~children=[
+            Basefn.Icon.make({name: Download, size: Sm}),
+            Component.text(" npm"),
+          ],
           (),
         )}
       </div>
