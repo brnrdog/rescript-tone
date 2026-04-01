@@ -332,18 +332,14 @@ type props = {
 let make = (props: props) => {
   let {currentPath, content} = props
 
-  <Layout
-    children={
-      <div class="docs-layout">
-        <Sidebar currentPath />
-        <div class="docs-main">
-          <DocsBreadcrumb currentPath />
-          <div class="docs-content"> {content} </div>
-          <PrevNextNav currentPath />
-          <FeedbackWidget />
-        </div>
-        <TableOfContents />
-      </div>
-    }
-  />
+  <div class="docs-layout">
+    <Sidebar currentPath />
+    <div class="docs-main">
+      <DocsBreadcrumb currentPath />
+      <div class="docs-content"> {content} </div>
+      <PrevNextNav currentPath />
+      <FeedbackWidget />
+    </div>
+    <TableOfContents />
+  </div>
 }
