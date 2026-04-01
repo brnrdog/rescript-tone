@@ -8,8 +8,14 @@
  *   4. Injects the markup into the Vite-built index.html shell.
  *   5. Writes the result to dist/<route>/index.html.
  *
- * Run with: node --loader ./scripts/node-loader.mjs scripts/prerender.mjs
+ * Run with: node scripts/prerender.mjs
  */
+
+// Register the custom ESM loader to stub CSS/asset imports.
+// Must happen before any app code is imported.
+import { register } from "node:module";
+import { pathToFileURL } from "node:url";
+register("./scripts/node-loader.mjs", pathToFileURL("./"));
 
 // DOM/browser shims must load before any app code
 import "./dom-shim.mjs";
