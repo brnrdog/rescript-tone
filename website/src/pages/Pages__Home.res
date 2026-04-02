@@ -649,33 +649,31 @@ module SoundGrid = {
                     )}
                   </div>
                 </div>,
-                // Tracks
-                <div class="sg-tracks">
-                  // Step numbers
-                  <div class="sg-step-numbers">
-                    <div class="sg-row-label-spacer" />
-                    {Component.fragment(
-                      Array.fromInitializer(~length=numSteps, i => {
-                        Component.element(
-                          "div",
-                          ~attrs=[
-                            Component.computedAttr("class", () =>
-                              "sg-col-num" ++ (Signal.get(currentStep) == i ? " active" : "")
-                            ),
-                          ],
-                          ~children=[Component.text(Int.toString(i + 1))],
-                          (),
-                        )
-                      }),
-                    )}
-                  </div>
-                  // Beats track
-                  <div class="sg-track sg-track-pink">
+                // Track cards in 2x2 grid
+                <div class="sg-cards">
+                  // Beats
+                  <div class="sg-card sg-track-pink">
                     <div class="sg-track-header">
                       <span class="sg-track-name">{Component.text("Beats")}</span>
-                      <code class="sg-track-code">
+                      <code class="sg-track-api">
                         {Component.text("Synth.triggerAttackRelease")}
                       </code>
+                    </div>
+                    <div class="sg-step-numbers">
+                      {Component.fragment(
+                        Array.fromInitializer(~length=numSteps, i =>
+                          Component.element(
+                            "div",
+                            ~attrs=[
+                              Component.computedAttr("class", () =>
+                                "sg-col-num" ++ (Signal.get(currentStep) == i ? " active" : "")
+                              ),
+                            ],
+                            ~children=[Component.text(Int.toString(i + 1))],
+                            (),
+                          )
+                        ),
+                      )}
                     </div>
                     {renderRows(
                       ~rowLabels=beatLabels,
@@ -684,13 +682,29 @@ module SoundGrid = {
                       ~exclusive=false,
                     )}
                   </div>
-                  // Chords track
-                  <div class="sg-track sg-track-amber">
+                  // Chords
+                  <div class="sg-card sg-track-amber">
                     <div class="sg-track-header">
                       <span class="sg-track-name">{Component.text("Chords")}</span>
-                      <code class="sg-track-code">
+                      <code class="sg-track-api">
                         {Component.text("PolySynth.triggerAttackRelease")}
                       </code>
+                    </div>
+                    <div class="sg-step-numbers">
+                      {Component.fragment(
+                        Array.fromInitializer(~length=numSteps, i =>
+                          Component.element(
+                            "div",
+                            ~attrs=[
+                              Component.computedAttr("class", () =>
+                                "sg-col-num" ++ (Signal.get(currentStep) == i ? " active" : "")
+                              ),
+                            ],
+                            ~children=[Component.text(Int.toString(i + 1))],
+                            (),
+                          )
+                        ),
+                      )}
                     </div>
                     {renderRows(
                       ~rowLabels=chordLabels,
@@ -699,13 +713,29 @@ module SoundGrid = {
                       ~exclusive=true,
                     )}
                   </div>
-                  // Bass track
-                  <div class="sg-track sg-track-green">
+                  // Bass
+                  <div class="sg-card sg-track-green">
                     <div class="sg-track-header">
                       <span class="sg-track-name">{Component.text("Bass")}</span>
-                      <code class="sg-track-code">
+                      <code class="sg-track-api">
                         {Component.text("FMSynth -> Filter -> Destination")}
                       </code>
+                    </div>
+                    <div class="sg-step-numbers">
+                      {Component.fragment(
+                        Array.fromInitializer(~length=numSteps, i =>
+                          Component.element(
+                            "div",
+                            ~attrs=[
+                              Component.computedAttr("class", () =>
+                                "sg-col-num" ++ (Signal.get(currentStep) == i ? " active" : "")
+                              ),
+                            ],
+                            ~children=[Component.text(Int.toString(i + 1))],
+                            (),
+                          )
+                        ),
+                      )}
                     </div>
                     {renderRows(
                       ~rowLabels=bassLabels,
@@ -714,13 +744,29 @@ module SoundGrid = {
                       ~exclusive=true,
                     )}
                   </div>
-                  // Melody track
-                  <div class="sg-track sg-track-purple">
+                  // Melody
+                  <div class="sg-card sg-track-purple">
                     <div class="sg-track-header">
                       <span class="sg-track-name">{Component.text("Melody")}</span>
-                      <code class="sg-track-code">
+                      <code class="sg-track-api">
                         {Component.text("Synth({oscillator: Triangle})")}
                       </code>
+                    </div>
+                    <div class="sg-step-numbers">
+                      {Component.fragment(
+                        Array.fromInitializer(~length=numSteps, i =>
+                          Component.element(
+                            "div",
+                            ~attrs=[
+                              Component.computedAttr("class", () =>
+                                "sg-col-num" ++ (Signal.get(currentStep) == i ? " active" : "")
+                              ),
+                            ],
+                            ~children=[Component.text(Int.toString(i + 1))],
+                            (),
+                          )
+                        ),
+                      )}
                     </div>
                     {renderRows(
                       ~rowLabels=melodyLabels,
