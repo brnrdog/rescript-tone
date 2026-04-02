@@ -240,43 +240,43 @@ module SoundGrid = {
     let isReady = Signal.make(false)
     let isPlaying = Signal.make(false)
     let currentStep = Signal.make(-1)
-    let bpm = Signal.make(120)
+    let bpm = Signal.make(113)
 
-    // Beat pattern (4 rows x 8 cols, non-exclusive)
+    // Beat pattern — 80s four-on-the-floor
     let beatRows = [
-      Signal.make([true, false, false, true, true, false, false, false]),
-      Signal.make([false, false, true, false, false, false, true, false]),
-      Signal.make([true, false, true, false, true, false, true, false]),
-      Signal.make([false, false, false, false, true, false, false, false]),
+      Signal.make([true, false, true, false, true, false, true, false]),   // Kick: every beat
+      Signal.make([false, false, true, false, false, false, true, false]), // Snare: 2 & 4
+      Signal.make([true, true, true, true, true, true, true, true]),       // HiHat: constant 8ths
+      Signal.make([false, false, true, false, false, false, true, false]), // Clap: with snare
     ]
     let beatLabels = ["Kick", "Snare", "HiHat", "Clap"]
 
-    // Chord pattern (4 rows x 8 cols, exclusive per column)
+    // Chord pattern — I vi IV V (C Am F G)
     let chordRows = [
-      Signal.make([true, true, false, false, false, false, false, false]),
-      Signal.make([false, false, true, true, false, false, false, false]),
-      Signal.make([false, false, false, false, true, true, false, false]),
-      Signal.make([false, false, false, false, false, false, true, true]),
+      Signal.make([false, false, true, true, false, false, false, false]), // Am: steps 3-4
+      Signal.make([false, false, false, false, true, true, false, false]), // F:  steps 5-6
+      Signal.make([true, true, false, false, false, false, false, false]), // C:  steps 1-2
+      Signal.make([false, false, false, false, false, false, true, true]), // G:  steps 7-8
     ]
     let chordLabels = ["Am", "F", "C", "G"]
 
-    // Bass pattern (5 rows x 8 cols, exclusive, notes high-to-low)
+    // Bass pattern — the riff (E G C . . D C .)
     let bassRows = [
-      Signal.make([false, false, false, false, false, false, false, false]),
-      Signal.make([false, false, false, false, true, false, false, false]),
-      Signal.make([false, false, true, false, false, false, true, false]),
-      Signal.make([false, false, false, false, false, false, false, true]),
-      Signal.make([true, false, false, false, false, false, false, false]),
+      Signal.make([false, false, false, false, false, false, false, false]), // A2
+      Signal.make([false, true, false, false, false, false, false, false]),  // G2: step 2
+      Signal.make([true, false, false, false, false, false, false, false]),  // E2: step 1
+      Signal.make([false, false, false, false, false, true, false, false]),  // D2: step 6
+      Signal.make([false, false, true, false, false, false, true, false]),   // C2: steps 3, 7
     ]
     let bassLabels = ["A2", "G2", "E2", "D2", "C2"]
 
-    // Melody pattern (5 rows x 8 cols, exclusive, notes high-to-low)
+    // Melody — synth hook (D E D G . E D C)
     let melodyRows = [
-      Signal.make([false, false, false, true, false, false, false, false]),
-      Signal.make([false, false, true, false, true, false, false, false]),
-      Signal.make([true, false, false, false, false, false, true, false]),
-      Signal.make([false, false, false, false, false, false, false, true]),
-      Signal.make([false, false, false, false, false, true, false, false]),
+      Signal.make([false, false, false, false, false, false, false, false]), // A4
+      Signal.make([false, false, false, true, false, false, false, false]),  // G4: step 4
+      Signal.make([false, true, false, false, false, true, false, false]),   // E4: steps 2, 6
+      Signal.make([true, false, true, false, false, false, true, false]),    // D4: steps 1, 3, 7
+      Signal.make([false, false, false, false, false, false, false, true]),  // C4: step 8
     ]
     let melodyLabels = ["A4", "G4", "E4", "D4", "C4"]
 
@@ -449,7 +449,7 @@ module SoundGrid = {
 
       // Transport BPM
       let transport = Tone.Core.getTransport()
-      Tone.Transport.bpm(transport)->Tone.Param.setValue(120.0)
+      Tone.Transport.bpm(transport)->Tone.Param.setValue(113.0)
 
       // Chord voicings
       let chordVoicings = [
@@ -597,7 +597,7 @@ module SoundGrid = {
 
     let changeBpm = evt => {
       let val: string = Obj.magic(evt)["target"]["value"]
-      let intVal = Int.fromString(val)->Option.getOr(120)
+      let intVal = Int.fromString(val)->Option.getOr(113)
       Signal.set(bpm, intVal)
       Tone.Transport.bpm(Tone.Core.getTransport())->Tone.Param.setValue(Int.toFloat(intVal))
     }
