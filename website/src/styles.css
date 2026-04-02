@@ -29,6 +29,10 @@
   --green-900: #074f3a;
   --green-950: #042e22;
 
+  /* Amber (warm accent) */
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+
   /* Purple (accents) */
   --purple-50: #faf5ff;
   --purple-100: #f3e8ff;
@@ -540,7 +544,7 @@ a:hover {
    Demos Grid (homepage)
    ======================================== */
 
-/* ---- Sound Grid (Ableton-inspired) ---- */
+/* ---- Sound Grid (Ableton-inspired multi-track sequencer) ---- */
 .grid-section {
   padding: var(--space-10) var(--space-6) var(--space-6);
   max-width: 720px;
@@ -633,20 +637,20 @@ a:hover {
   accent-color: var(--pink-500);
 }
 
-/* The step grid */
-.sg {
+/* Track layout */
+.sg-tracks {
   padding: 0 var(--space-6) var(--space-4);
 }
 
-.sg-header {
+.sg-step-numbers {
   display: grid;
-  grid-template-columns: 140px repeat(8, 1fr);
-  gap: 4px;
-  margin-bottom: 4px;
+  grid-template-columns: 56px repeat(8, 1fr);
+  gap: 3px;
+  margin-bottom: 2px;
 }
 
-.sg-label-spacer {
-  /* empty cell above the row labels */
+.sg-row-label-spacer {
+  /* empty cell for alignment */
 }
 
 .sg-col-num {
@@ -664,101 +668,134 @@ a:hover {
   font-weight: 700;
 }
 
-/* Row */
-.sg-row {
-  display: grid;
-  grid-template-columns: 140px repeat(8, 1fr);
-  gap: 4px;
-  margin-bottom: 4px;
+/* Individual track */
+.sg-track {
+  margin-bottom: var(--space-3);
 }
 
-.sg-label {
+.sg-track:last-child {
+  margin-bottom: 0;
+}
+
+.sg-track-header {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-right: var(--space-2);
-  overflow: hidden;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
-.sg-label-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.2;
+.sg-track-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.sg-label-code {
+.sg-track-api {
   font-size: 10px;
   font-family: var(--font-mono);
   color: var(--text-muted);
-  line-height: 1.3;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Row */
+.sg-row {
+  display: grid;
+  grid-template-columns: 56px repeat(8, 1fr);
+  gap: 3px;
+  margin-bottom: 2px;
+}
+
+.sg-row-label {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding-right: var(--space-1);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* Cell */
 .sg-cell {
-  aspect-ratio: 1;
+  height: 24px;
   background: var(--bg-tertiary);
   border: 1.5px solid var(--border-primary);
-  border-radius: var(--radius-sm);
+  border-radius: 3px;
   cursor: pointer;
   transition: all 0.08s ease;
   padding: 0;
-  min-height: 36px;
 }
 
 .sg-cell:hover {
   border-color: var(--text-muted);
 }
 
-/* Row colors – pink (Lead) */
-.sg-row-pink .sg-cell.on {
+/* Track colors – pink (Beats) */
+.sg-track-pink .sg-track-name {
+  color: var(--pink-400);
+}
+
+.sg-track-pink .sg-cell.on {
   background: rgba(229, 53, 171, 0.2);
   border-color: var(--pink-500);
 }
 
-.sg-row-pink .sg-cell.pulse {
+.sg-track-pink .sg-cell.pulse {
   background: var(--pink-500);
   border-color: var(--pink-400);
   box-shadow: 0 0 8px rgba(229, 53, 171, 0.5);
 }
 
-.sg-row-pink .sg-label-name {
-  color: var(--pink-400);
+/* Track colors – amber (Chords) */
+.sg-track-amber .sg-track-name {
+  color: var(--amber-400);
 }
 
-/* Row colors – green (Bass) */
-.sg-row-green .sg-cell.on {
+.sg-track-amber .sg-cell.on {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--amber-500);
+}
+
+.sg-track-amber .sg-cell.pulse {
+  background: var(--amber-500);
+  border-color: var(--amber-400);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+/* Track colors – green (Bass) */
+.sg-track-green .sg-track-name {
+  color: var(--green-400);
+}
+
+.sg-track-green .sg-cell.on {
   background: rgba(45, 212, 160, 0.2);
   border-color: var(--green-500);
 }
 
-.sg-row-green .sg-cell.pulse {
+.sg-track-green .sg-cell.pulse {
   background: var(--green-500);
   border-color: var(--green-400);
   box-shadow: 0 0 8px rgba(45, 212, 160, 0.5);
 }
 
-.sg-row-green .sg-label-name {
-  color: var(--green-400);
+/* Track colors – purple (Melody) */
+.sg-track-purple .sg-track-name {
+  color: var(--purple-400);
 }
 
-/* Row colors – purple (Beat) */
-.sg-row-purple .sg-cell.on {
+.sg-track-purple .sg-cell.on {
   background: rgba(168, 85, 247, 0.2);
   border-color: var(--purple-500);
 }
 
-.sg-row-purple .sg-cell.pulse {
+.sg-track-purple .sg-cell.pulse {
   background: var(--purple-500);
   border-color: var(--purple-400);
   box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
-}
-
-.sg-row-purple .sg-label-name {
-  color: var(--purple-400);
 }
 
 /* Current step indicator */
@@ -766,8 +803,85 @@ a:hover {
   box-shadow: inset 0 0 0 1.5px var(--text-muted);
 }
 
-.sg-cell.on.current {
-  /* pulse class handles the glow */
+/* Effects knobs */
+.fx-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-primary);
+}
+
+.fx-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.fx-knobs {
+  display: flex;
+  gap: var(--space-5);
+  flex: 1;
+  justify-content: center;
+}
+
+.fx-knob {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.fx-knob-dial {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  position: relative;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.fx-knob-dial:active {
+  cursor: grabbing;
+}
+
+.fx-knob-inner {
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  pointer-events: none;
+}
+
+.fx-knob-pointer {
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background: var(--text-primary);
+  left: calc(50% - 1px);
+  top: 3px;
+  transform-origin: 1px 19px;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.fx-knob-label {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.fx-knob-value {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  min-width: 32px;
+  text-align: center;
 }
 
 /* Start audio prompt */
@@ -1478,12 +1592,13 @@ a:hover {
     font-size: 16px;
   }
 
-  .sg-header,
+  .sg-step-numbers,
   .sg-row {
-    grid-template-columns: 100px repeat(8, 1fr);
+    grid-template-columns: 40px repeat(8, 1fr);
+    gap: 2px;
   }
 
-  .sg-label-code {
+  .sg-track-api {
     display: none;
   }
 
@@ -1491,14 +1606,35 @@ a:hover {
     padding: var(--space-6) var(--space-3);
   }
 
-  .sg {
-    padding: 0 var(--space-3) var(--space-4);
+  .sg-tracks {
+    padding: 0 var(--space-3) var(--space-3);
   }
 
   .grid-header,
   .grid-controls {
     padding-left: var(--space-4);
     padding-right: var(--space-4);
+  }
+
+  .fx-section {
+    flex-wrap: wrap;
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .fx-knob-dial {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fx-knob-inner {
+    inset: 4px;
+  }
+
+  .fx-knob-pointer {
+    height: 8px;
+    top: 3px;
+    transform-origin: 1px 15px;
   }
 
   .docs-sidebar {
