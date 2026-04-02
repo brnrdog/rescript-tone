@@ -547,7 +547,7 @@ a:hover {
 /* ---- Sound Grid (Ableton-inspired multi-track sequencer) ---- */
 .grid-section {
   padding: var(--space-10) var(--space-6) var(--space-6);
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -637,28 +637,35 @@ a:hover {
   accent-color: var(--pink-500);
 }
 
-/* Track layout */
-.sg-tracks {
+/* Card grid layout */
+.sg-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
   padding: 0 var(--space-6) var(--space-4);
+}
+
+.sg-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  overflow: hidden;
 }
 
 .sg-step-numbers {
   display: grid;
-  grid-template-columns: 56px repeat(8, 1fr);
+  grid-template-columns: 40px repeat(8, 1fr);
   gap: 3px;
   margin-bottom: 2px;
 }
 
-.sg-row-label-spacer {
-  /* empty cell for alignment */
-}
-
 .sg-col-num {
   text-align: center;
-  font-size: 10px;
+  font-size: 9px;
   font-family: var(--font-mono);
   color: var(--text-muted);
-  padding: var(--space-1) 0;
+  padding: 2px 0;
   border-radius: var(--radius-sm);
   transition: color 0.1s ease;
 }
@@ -668,31 +675,23 @@ a:hover {
   font-weight: 700;
 }
 
-/* Individual track */
-.sg-track {
-  margin-bottom: var(--space-3);
-}
-
-.sg-track:last-child {
-  margin-bottom: 0;
-}
-
+/* Track header */
 .sg-track-header {
   display: flex;
   align-items: baseline;
   gap: var(--space-2);
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
 }
 
 .sg-track-name {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .sg-track-api {
-  font-size: 10px;
+  font-size: 9px;
   font-family: var(--font-mono);
   color: var(--text-muted);
   overflow: hidden;
@@ -703,7 +702,7 @@ a:hover {
 /* Row */
 .sg-row {
   display: grid;
-  grid-template-columns: 56px repeat(8, 1fr);
+  grid-template-columns: 40px repeat(8, 1fr);
   gap: 3px;
   margin-bottom: 2px;
 }
@@ -711,10 +710,10 @@ a:hover {
 .sg-row-label {
   display: flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 9px;
   font-family: var(--font-mono);
   color: var(--text-muted);
-  padding-right: var(--space-1);
+  padding-right: 2px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -735,7 +734,15 @@ a:hover {
 }
 
 /* Track colors – pink (Beats) */
+.sg-track-pink.sg-card {
+  border-color: rgba(229, 53, 171, 0.3);
+}
+
 .sg-track-pink .sg-track-name {
+  color: var(--pink-400);
+}
+
+.sg-track-pink .sg-col-num.active {
   color: var(--pink-400);
 }
 
@@ -751,7 +758,15 @@ a:hover {
 }
 
 /* Track colors – amber (Chords) */
+.sg-track-amber.sg-card {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
 .sg-track-amber .sg-track-name {
+  color: var(--amber-400);
+}
+
+.sg-track-amber .sg-col-num.active {
   color: var(--amber-400);
 }
 
@@ -767,7 +782,15 @@ a:hover {
 }
 
 /* Track colors – green (Bass) */
+.sg-track-green.sg-card {
+  border-color: rgba(45, 212, 160, 0.3);
+}
+
 .sg-track-green .sg-track-name {
+  color: var(--green-400);
+}
+
+.sg-track-green .sg-col-num.active {
   color: var(--green-400);
 }
 
@@ -783,7 +806,15 @@ a:hover {
 }
 
 /* Track colors – purple (Melody) */
+.sg-track-purple.sg-card {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
 .sg-track-purple .sg-track-name {
+  color: var(--purple-400);
+}
+
+.sg-track-purple .sg-col-num.active {
   color: var(--purple-400);
 }
 
@@ -1592,10 +1623,10 @@ a:hover {
     font-size: 16px;
   }
 
-  .sg-step-numbers,
-  .sg-row {
-    grid-template-columns: 40px repeat(8, 1fr);
-    gap: 2px;
+  .sg-cards {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    padding: 0 var(--space-4) var(--space-3);
   }
 
   .sg-track-api {
@@ -1604,10 +1635,6 @@ a:hover {
 
   .grid-section {
     padding: var(--space-6) var(--space-3);
-  }
-
-  .sg-tracks {
-    padding: 0 var(--space-3) var(--space-3);
   }
 
   .grid-header,
