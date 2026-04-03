@@ -2,6 +2,7 @@ node_modules/
 lib/
 .bsb.lock
 *.res.js
+*.res.mjs
 .vite/
 dist/
 .merlin
